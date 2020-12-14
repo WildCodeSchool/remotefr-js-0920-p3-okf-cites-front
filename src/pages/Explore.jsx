@@ -1,5 +1,11 @@
 import React from 'react';
+import Searchbar from '../components/Searchbar';
 
 export default function Explore() {
-  return <h1>Explore Page</h1>;
+  return (
+    <main>
+      <h1>Mémoires d'Éléphant</h1>
+      <Searchbar />
+    </main>
+  );
 }

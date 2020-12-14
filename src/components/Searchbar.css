@@ -1,0 +1,32 @@
+.search {
+  border: 1px solid black;
+  border-radius: 20px;
+  overflow: hidden;
+  width: 377px;
+}
+
+.searchbar {
+  width: 350px;
+  height: 25px;
+  border: none;
+}
+
+.searchbar:focus {
+  outline: none;
+}
+
+.searchbar::placeholder {
+  padding-left: 7px;
+}
+
+.search-button {
+  background-color: var(--info);
+  border-radius: 20px;
+  border: transparent;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.search-button:focus {
+  outline: none;
+}
