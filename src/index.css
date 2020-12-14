@@ -1,3 +1,20 @@
+:root {
+  --primary: #33375f;
+  --success: #1a771f;
+  --info: #1b59f7;
+  --warning: #c17803;
+  --danger: #891758;
+
+  --light-gray: #f4f5fa;
+
+  --light-blue: #6e718c;
+  --dark-blue: #33385d;
+}
+
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
 }

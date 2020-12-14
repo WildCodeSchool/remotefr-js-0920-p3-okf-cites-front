@@ -1,13 +1,21 @@
 import React from 'react';
-import './App.css';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import Explore from './pages/Explore';
+import Visualize from './pages/Visualize';
+import Contribute from './pages/Contribute';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1>React starter template</h1>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Navbar />
+
+      <Switch>
+        <Route exact path="/" component={Explore} />
+        <Route path="/visualiser" component={Visualize} />
+        <Route path="/contribuer" component={Contribute} />
+      </Switch>
+    </BrowserRouter>
   );
 }
 
