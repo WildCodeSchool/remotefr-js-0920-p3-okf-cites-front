@@ -1,0 +1,50 @@
+.singleCard{
+  display: flex;
+  flex-direction: column;
+  width: 28%;
+  background-color: white; 
+ 
+}
+
+.picCard{
+  display: flex;
+  width: 100%;
+
+
+}
+
+.caption{
+  position: absolute;
+  align-self: flex-end;
+  margin-bottom: 6%;
+  background-color:  #891758;
+  width: 10em;
+  color: white;
+  padding-left: 0.5em;
+
+}
+
+.animalPic{
+  border-radius: 40px;
+  width: 100%;
+}
+
+.picCard{
+  margin:0;
+}
+
+.vernacular{
+  text-align: center;
+  margin-bottom: 0;
+}
+
+.scientific{
+  text-align: center;
+  margin-bottom: 0;
+  margin-top: 2%;
+}
+
+.resume{
+  text-align: left;
+  margin-top:2%;
+}
