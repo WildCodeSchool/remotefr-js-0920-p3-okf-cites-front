@@ -3,11 +3,12 @@
   border-radius: 20px;
   overflow: hidden;
   width: 377px;
+  max-height: 27px;
 }
 
 .searchbar {
   width: 350px;
-  height: 25px;
+  max-height: 27px;
   border: none;
 }
 
@@ -20,7 +21,11 @@
 }
 
 .search-button {
-  background-color: var(--info);
+  background: linear-gradient(
+    149deg,
+    rgba(27, 89, 247, 1) 0%,
+    rgba(7, 22, 62, 1) 100%
+  );
   border-radius: 20px;
   border: transparent;
   padding: 5px;

@@ -1,0 +1,32 @@
+.header {
+  display: flex;
+  margin: 120px 300px;
+}
+
+h1 {
+  font-size: 45px;
+  margin: 0;
+}
+
+h2 {
+  font-size: 20px;
+  text-transform: uppercase;
+}
+
+p {
+  font-size: 23px;
+}
+
+.title {
+  display: flex;
+}
+
+.introduction {
+  max-width: 700px;
+  flex-direction: column;
+}
+
+#elephant-logo {
+  height: 55px;
+  margin-right: 10px;
+}
