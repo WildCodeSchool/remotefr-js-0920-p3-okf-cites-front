@@ -92,7 +92,7 @@ export default function SingleCard() {
             </figcaption>
           </figure>
 
-          <h2 className={styles.vernacular}>{table.nomcummun}</h2>
+          <h2 className={styles.vernacular}>{table.nomcommun}</h2>
           <h3 className={styles.scientific}>{table.nomscientifique}</h3>
           <p className={styles.resume}>{table.description}</p>
         </div>

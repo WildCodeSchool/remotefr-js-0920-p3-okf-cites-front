@@ -1,11 +1,12 @@
 import React from 'react';
 import IcomoonReact from 'icomoon-react';
+import PropTypes from 'prop-types';
 import iconSet from '../assets/selection.json';
 import styles from './Searchbar.module.css';
 
-export default function Searchbar() {
+export default function Searchbar({ value, onChange, onSubmit }) {
   return (
-    <form className={styles.form}>
+    <form className={styles.form} onSubmit={onSubmit}>
       {/* Label has associated id, but not possible to put the input element inside due to div */
       /* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
       <label htmlFor="searchbar" className={styles.label}>
@@ -17,6 +18,8 @@ export default function Searchbar() {
           id="searchbar"
           className={styles.searchbar}
           placeholder="Veuillez entrer le nom d'une plante ou d'un animal"
+          value={value}
+          onChange={onChange}
         />
         <button className={styles.searchButton} type="submit">
           <IcomoonReact
@@ -31,3 +34,8 @@ export default function Searchbar() {
     </form>
   );
 }
+Searchbar.propTypes = {
+  value: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+};

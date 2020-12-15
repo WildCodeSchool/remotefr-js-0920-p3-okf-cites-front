@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import Searchbar from '../components/Searchbar';
 import SingleCard from '../components/SingleCard';
 import styles from './Explore.module.css';
 import elephantLogo from '../assets/elephant-logo.png';
 
-function ExploreHeader() {
+function ExploreHeader({ searchValue, onSearchChange, onSearchSubmit }) {
   return (
     <header className={styles.header}>
       <div className={styles.headerIntroduction}>
@@ -23,15 +24,35 @@ function ExploreHeader() {
         </p>
       </div>
 
-      <Searchbar />
+      <Searchbar
+        value={searchValue}
+        onChange={onSearchChange}
+        onSubmit={onSearchSubmit}
+      />
     </header>
   );
 }
+ExploreHeader.propTypes = {
+  searchValue: PropTypes.string.isRequired,
+  onSearchChange: PropTypes.func.isRequired,
+  onSearchSubmit: PropTypes.func.isRequired,
+};
 
 export default function Explore() {
+  const [searchQuery, setSearchQuery] = useState('');
+
   return (
     <>
-      <ExploreHeader />
+      <ExploreHeader
+        searchValue={searchQuery}
+        onSearchChange={(e) => {
+          setSearchQuery(e.target.value);
+        }}
+        onSearchSubmit={(e) => {
+          e.preventDefault();
+          alert('Search submit');
+        }}
+      />
       <main>
         <SingleCard />
       </main>
