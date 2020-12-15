@@ -10,12 +10,13 @@ function App() {
   return (
     <BrowserRouter>
       <Navbar />
-      <SingleCard />
+
       <Switch>
         <Route exact path="/" component={Explore} />
         <Route path="/visualiser" component={Visualize} />
         <Route path="/contribuer" component={Contribute} />
       </Switch>
+      <SingleCard />
     </BrowserRouter>
   );
 }
