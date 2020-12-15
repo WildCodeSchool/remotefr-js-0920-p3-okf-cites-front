@@ -1,32 +1,29 @@
 .header {
   display: flex;
-  margin: 120px 300px;
+  justify-content: space-around;
+  align-items: center;
+  margin: 7rem 3rem;
 }
 
-h1 {
+.headerTitle {
   font-size: 45px;
   margin: 0;
 }
 
-h2 {
-  font-size: 20px;
-  text-transform: uppercase;
-}
-
-p {
+.headerText {
   font-size: 23px;
 }
 
-.title {
+.headerImageTitleWrapper {
   display: flex;
 }
 
-.introduction {
+.headerIntroduction {
   max-width: 700px;
   flex-direction: column;
 }
 
-#elephant-logo {
+.elephantLogo {
   height: 55px;
   margin-right: 10px;
 }

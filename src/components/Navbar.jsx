@@ -35,7 +35,7 @@ function NavbarLink({ title, description, url }) {
     </NavLink>
   );
 }
-NavLink.PropTypes = {
+NavbarLink.propTypes = {
   title: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   url: PropTypes.string.isRequired,
@@ -43,20 +43,18 @@ NavLink.PropTypes = {
 
 export default function Navbar() {
   return (
-    <header>
-      <nav className={styles.nav}>
-        <ul className={styles.navList}>
-          {links.map((link) => (
-            <li key={link.title}>
-              <NavbarLink
-                title={link.title}
-                description={link.description}
-                url={link.url}
-              />
-            </li>
-          ))}
-        </ul>
-      </nav>
-    </header>
+    <nav className={styles.nav}>
+      <ul className={styles.navList}>
+        {links.map((link) => (
+          <li key={link.title}>
+            <NavbarLink
+              title={link.title}
+              description={link.description}
+              url={link.url}
+            />
+          </li>
+        ))}
+      </ul>
+    </nav>
   );
 }

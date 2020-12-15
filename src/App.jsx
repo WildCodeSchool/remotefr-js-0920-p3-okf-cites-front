@@ -4,13 +4,11 @@ import Navbar from './components/Navbar';
 import Explore from './pages/Explore';
 import Visualize from './pages/Visualize';
 import Contribute from './pages/Contribute';
-import SingleCard from './components/SingleCard';
 
 function App() {
   return (
     <BrowserRouter>
       <Navbar />
-      <SingleCard />
       <Switch>
         <Route exact path="/" component={Explore} />
         <Route path="/visualiser" component={Visualize} />
