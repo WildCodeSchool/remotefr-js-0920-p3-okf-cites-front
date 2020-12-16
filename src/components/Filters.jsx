@@ -1,11 +1,16 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { slugify } from '../utils';
 import styles from './Filters.module.css';
 
-function FilterWithChildFilters({ label, childFilters, selected, onSelect }) {
+function FilterWithChildFilters({
+  name,
+  label,
+  childFilters,
+  selected,
+  onSelect,
+}) {
   const parentCheckRef = useRef();
-  const parentCheckId = useMemo(() => `check-${slugify(label)}`, [label]);
+  const parentCheckId = `check-${name}`;
 
   const isAllChecked = selected.length === childFilters.length;
 
@@ -38,7 +43,7 @@ function FilterWithChildFilters({ label, childFilters, selected, onSelect }) {
           onChange={handleParentChange}
           ref={parentCheckRef}
         />
-        <span className={[styles.parentLabelText, styles.labelText].join(' ')}>
+        <span className={`${styles.parentLabelText} ${styles.labelText}`}>
           {label}
         </span>
         <span className={styles.count} /> {/* To fill grid space */}
@@ -68,91 +73,73 @@ function FilterWithChildFilters({ label, childFilters, selected, onSelect }) {
   );
 }
 FilterWithChildFilters.propTypes = {
+  name: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
   childFilters: PropTypes.arrayOf(
     PropTypes.shape({
       name: PropTypes.string,
       label: PropTypes.string,
       count: PropTypes.number,
-      checked: PropTypes.bool,
     }),
   ).isRequired,
   selected: PropTypes.arrayOf(PropTypes.string).isRequired,
   onSelect: PropTypes.func.isRequired,
 };
-
-const animalChildFilters = [
-  { name: 'actinopteri', label: 'Actinopteri', count: 100 },
-  { name: 'amphibia', label: 'Amphibia', count: 100 },
-  { name: 'anthozoa', label: 'Anthozoa', count: 100 },
-  { name: 'arachnida', label: 'Arachnida', count: 100 },
-  { name: 'aves', label: 'Aves', count: 100 },
-  { name: 'bivalvia', label: 'Bivalvia', count: 100 },
-  { name: 'coelacanthi', label: 'Coelacanthi', count: 100 },
-  { name: 'dipneusti', label: 'Dipneusti', count: 100 },
-  {
-    name: 'elasmobranchii',
-    label: 'Elasmobranchii',
-    count: 100,
-  },
-  { name: 'gastropoda', label: 'Gastropoda', count: 100 },
-  { name: 'hirudinoidea', label: 'Hirudinoidea', count: 100 },
-  {
-    name: 'holothuroidea',
-    label: 'Holothuroidea',
-    count: 100,
-  },
-  { name: 'hydrozoa', label: 'Hydrozoa', count: 100 },
-  { name: 'insecta', label: 'Insecta', count: 100 },
-  { name: 'mammalia', label: 'Mammalia', count: 100 },
-  { name: 'reptilia', label: 'Reptilia', count: 100 },
-];
-const citesChildFilters = [
-  { name: 'I', label: 'Espèces menacées (Annexe I)', count: 1 },
-  { name: 'II', label: 'Espèces vulnérables (Annexe II)', count: 12 },
-  { name: 'III', label: 'Espèces vulnérables (Annexe III)', count: 123 },
-];
-export default function Filters() {
-  const [animalFilters, setAnimalFilters] = useState([]);
-  const [plantFilter, setPlantFilter] = useState(false);
-  const [citesFilters, setCitesFilters] = useState([]);
+export default function Filters({ filters, selected, onSelect }) {
+  const handleOnSelect = (name) => (newSelected) => {
+    onSelect({ ...selected, [name]: newSelected });
+  };
 
   return (
     <ul className={styles.filterGrid}>
-      <li className={styles.filterListItem}>
-        <FilterWithChildFilters
-          label="Faune"
-          childFilters={animalChildFilters}
-          selected={animalFilters}
-          onSelect={setAnimalFilters}
-        />
-      </li>
-      <li className={styles.filterListItem}>
-        <label htmlFor="check-flore" className={styles.label}>
-          <input
-            id="check-flore"
-            type="checkbox"
-            checked={plantFilter}
-            onChange={(e) => {
-              setPlantFilter(e.target.checked);
-            }}
-          />
-          <span
-            className={[styles.parentLabelText, styles.labelText].join(' ')}
-          >
-            Flore
-          </span>
-          <span className={styles.count} /> {/* To fill grid space */}
-        </label>
-      </li>
-      <li className={styles.filterListItem}>
-        <FilterWithChildFilters
-          label="Annexe CITES"
-          childFilters={citesChildFilters}
-          selected={citesFilters}
-          onSelect={setCitesFilters}
-        />
-      </li>
+      {Object.entries(filters).map(([name, filter]) => (
+        <li key={name} className={styles.filterListItem}>
+          {filter.childFilters !== undefined ? (
+            // Filter with child filters
+            <FilterWithChildFilters
+              name={name}
+              label={filter.label}
+              childFilters={filter.childFilters}
+              selected={selected[name]}
+              onSelect={handleOnSelect(name)}
+            />
+          ) : (
+            // Filter with no child filter
+            <label htmlFor={`check-${name}`} className={styles.label}>
+              <input
+                id={`check-${name}`}
+                type="checkbox"
+                checked={selected[name]}
+                onChange={(e) => {
+                  handleOnSelect(name)(e.target.checked);
+                }}
+              />
+              <span className={`${styles.parentLabelText} ${styles.labelText}`}>
+                {filter.label}
+              </span>
+              <span className={styles.count} /> {/* To fill grid space */}
+            </label>
+          )}
+        </li>
+      ))}
     </ul>
   );
 }
+Filters.propTypes = {
+  filters: PropTypes.objectOf(
+    PropTypes.shape({
+      label: PropTypes.string,
+      childFilters: PropTypes.arrayOf(
+        PropTypes.shape({
+          name: PropTypes.string,
+          label: PropTypes.string,
+          count: PropTypes.number,
+        }),
+      ),
+    }),
+  ).isRequired,
+  selected: PropTypes.objectOf(
+    PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.string), PropTypes.bool]),
+  ).isRequired,
+  onSelect: PropTypes.func.isRequired,
+};

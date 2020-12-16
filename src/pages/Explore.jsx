@@ -41,6 +41,11 @@ ExploreHeader.propTypes = {
 
 export default function Explore() {
   const [searchQuery, setSearchQuery] = useState('');
+  const [filters, setFilters] = useState({
+    animal: [],
+    flore: false,
+    cites: [],
+  });
 
   return (
     <>
@@ -55,7 +60,60 @@ export default function Explore() {
         }}
       />
       <aside>
-        <Filters />
+        <Filters
+          filters={{
+            animal: {
+              label: 'Faune',
+              childFilters: [
+                { name: 'actinopteri', label: 'Actinopteri', count: 100 },
+                { name: 'amphibia', label: 'Amphibia', count: 100 },
+                { name: 'anthozoa', label: 'Anthozoa', count: 100 },
+                { name: 'arachnida', label: 'Arachnida', count: 100 },
+                { name: 'aves', label: 'Aves', count: 100 },
+                { name: 'bivalvia', label: 'Bivalvia', count: 100 },
+                { name: 'coelacanthi', label: 'Coelacanthi', count: 100 },
+                { name: 'dipneusti', label: 'Dipneusti', count: 100 },
+                {
+                  name: 'elasmobranchii',
+                  label: 'Elasmobranchii',
+                  count: 100,
+                },
+                { name: 'gastropoda', label: 'Gastropoda', count: 100 },
+                { name: 'hirudinoidea', label: 'Hirudinoidea', count: 100 },
+                {
+                  name: 'holothuroidea',
+                  label: 'Holothuroidea',
+                  count: 100,
+                },
+                { name: 'hydrozoa', label: 'Hydrozoa', count: 100 },
+                { name: 'insecta', label: 'Insecta', count: 100 },
+                { name: 'mammalia', label: 'Mammalia', count: 100 },
+                { name: 'reptilia', label: 'Reptilia', count: 100 },
+              ],
+            },
+            flore: {
+              label: 'Faune',
+            },
+            cites: {
+              label: 'Annexe CITES',
+              childFilters: [
+                { name: 'I', label: 'Espèces menacées (Annexe I)', count: 1 },
+                {
+                  name: 'II',
+                  label: 'Espèces vulnérables (Annexe II)',
+                  count: 12,
+                },
+                {
+                  name: 'III',
+                  label: 'Espèces vulnérables (Annexe III)',
+                  count: 123,
+                },
+              ],
+            },
+          }}
+          selected={filters}
+          onSelect={setFilters}
+        />
       </aside>
       <main>
         <SingleCard />
