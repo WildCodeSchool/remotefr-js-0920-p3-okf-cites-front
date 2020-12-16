@@ -1,0 +1,46 @@
+.filterGrid {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+}
+
+.filterList {
+  display: contents;
+}
+
+.filterGrid,
+.filterList {
+  list-style: none;
+  padding: 0;
+  font-family: 'Raleway', sans-serif;
+}
+
+.filterListItem {
+  margin: 0.5rem 0;
+
+  display: contents;
+}
+
+.label {
+  display: contents;
+}
+
+.labelText {
+  margin-left: 0.5rem;
+}
+
+.parentLabelText {
+  font-weight: 700;
+  font-size: 1.2rem;
+  text-transform: uppercase;
+
+  display: inline-block; /* For ::first-letter to work */
+}
+.parentLabelText::first-letter {
+  font-size: 1.5rem;
+}
+
+.count {
+  color: var(--gray-blue);
+  margin-left: auto;
+}

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Searchbar from '../components/Searchbar';
 import SingleCard from '../components/SingleCard';
+import Filters from '../components/Filters';
 import styles from './Explore.module.css';
 import elephantLogo from '../assets/elephant-logo.png';
 
@@ -53,6 +54,9 @@ export default function Explore() {
           alert('Search submit');
         }}
       />
+      <aside>
+        <Filters />
+      </aside>
       <main>
         <SingleCard />
       </main>
