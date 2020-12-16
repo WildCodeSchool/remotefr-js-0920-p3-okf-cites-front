@@ -9,6 +9,7 @@
   display: flex;
   flex-direction: column;
   width: 18%;
+
   background-color: white; 
   margin:1%;
   
@@ -18,6 +19,8 @@
 .picCard{
   display: flex;
   width: 100%;
+  height: 40%;
+  
 
 
 }
@@ -25,7 +28,7 @@
 .caption{
   position: absolute;
   align-self: flex-end;
-  margin-bottom: 6%;
+  margin-bottom: 3%;
   background-color:  #891758;
   width: 10em;
   color: white;
