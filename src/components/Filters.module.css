@@ -1,6 +1,7 @@
 .filterGrid {
   display: grid;
   grid-template-columns: auto 1fr auto;
+  grid-gap: 0.2rem 0.5rem;
   align-items: center;
 }
 
@@ -16,17 +17,11 @@
 }
 
 .filterListItem {
-  margin: 0.5rem 0;
-
   display: contents;
 }
 
 .label {
   display: contents;
-}
-
-.labelText {
-  margin-left: 0.5rem;
 }
 
 .parentLabelText {

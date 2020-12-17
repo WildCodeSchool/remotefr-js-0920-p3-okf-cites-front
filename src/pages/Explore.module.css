@@ -27,3 +27,23 @@
   height: 55px;
   margin-right: 10px;
 }
+
+.background {
+  background-color: var(--light-gray);
+}
+
+.content {
+  display: flex;
+  max-width: 90%;
+
+  margin: auto;
+}
+
+.filterBox {
+  margin-right: 5%;
+  flex-shrink: 0;
+}
+
+.filterBoxCount {
+  color: var(--dark-blue);
+}

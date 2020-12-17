@@ -1,62 +1,55 @@
-.cardContainer{
+.cardContainer {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-around;
 }
 
-.singleCard{
+.singleCard {
   display: flex;
   flex-direction: column;
   width: 18%;
 
-  background-color: white; 
-  margin:1%;
-  
- 
+  margin: 1%;
 }
 
-.picCard{
+.picCard {
   display: flex;
   width: 100%;
   height: 40%;
-  
-
-
 }
 
-.caption{
+.caption {
   position: absolute;
   align-self: flex-end;
   margin-bottom: 3%;
-  background-color:  #891758;
+  background-color: #891758;
   width: 10em;
   color: white;
   padding-left: 0.5em;
-
 }
 
-.animalPic{
+.animalPic {
   border-radius: 40px;
   width: 100%;
 }
 
-.picCard{
-  margin:0;
+.picCard {
+  margin: 0;
 }
 
-.vernacular{
+.vernacular {
   text-align: center;
   margin-bottom: 0;
 }
 
-.scientific{
+.scientific {
   text-align: center;
   margin-bottom: 0;
   margin-top: 2%;
 }
 
-.resume{
+.resume {
   text-align: left;
-  margin-top:2%;
+  margin-top: 2%;
 }

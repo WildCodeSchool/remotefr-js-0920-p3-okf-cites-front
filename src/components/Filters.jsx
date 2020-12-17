@@ -18,7 +18,7 @@ function FilterWithChildFilters({
     // Indeterminate if some but not all sub filters are checked
     parentCheckRef.current.indeterminate =
       selected.length > 0 && selected.length < childFilters.length;
-  }, [selected]);
+  }, [selected, childFilters]);
 
   const handleParentChange = (e) => {
     onSelect(e.target.checked ? childFilters.map((c) => c.name) : []);
@@ -43,9 +43,7 @@ function FilterWithChildFilters({
           onChange={handleParentChange}
           ref={parentCheckRef}
         />
-        <span className={`${styles.parentLabelText} ${styles.labelText}`}>
-          {label}
-        </span>
+        <span className={styles.parentLabelText}>{label}</span>
         <span className={styles.count} /> {/* To fill grid space */}
       </label>
 
@@ -62,7 +60,7 @@ function FilterWithChildFilters({
                   checked={selectedSet.has(child.name)}
                   onChange={handleChildfilterChange(child.name)}
                 />
-                <span className={styles.labelText}>{child.label}</span>
+                <span>{child.label}</span>
                 <span className={styles.count}>{child.count}</span>
               </label>
             </li>
@@ -114,9 +112,7 @@ export default function Filters({ filters, selected, onSelect }) {
                   handleOnSelect(name)(e.target.checked);
                 }}
               />
-              <span className={`${styles.parentLabelText} ${styles.labelText}`}>
-                {filter.label}
-              </span>
+              <span className={styles.parentLabelText}>{filter.label}</span>
               <span className={styles.count} /> {/* To fill grid space */}
             </label>
           )}
