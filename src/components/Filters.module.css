@@ -36,6 +36,8 @@
 }
 
 .count {
+  /* TODO Improve color contrast for a11y  */
   color: var(--gray-blue);
+  font-weight: 700;
   margin-left: auto;
 }

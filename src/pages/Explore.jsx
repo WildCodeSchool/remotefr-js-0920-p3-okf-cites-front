@@ -16,6 +16,8 @@ function ExploreHeader({ searchValue, onSearchChange, onSearchSubmit }) {
             src={elephantLogo}
             alt="Dessin éléphant noir sur fond transparent"
             id="elephant-logo"
+            width="55"
+            height="55"
           />
           <h1 className={styles.headerTitle}>Mémoires d&apos;Éléphant</h1>
         </div>

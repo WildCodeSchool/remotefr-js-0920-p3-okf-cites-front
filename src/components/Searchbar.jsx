@@ -21,7 +21,11 @@ export default function Searchbar({ value, onChange, onSubmit }) {
           value={value}
           onChange={onChange}
         />
-        <button className={styles.searchButton} type="submit">
+        <button
+          className={styles.searchButton}
+          type="submit"
+          aria-label="Lancer la recherche"
+        >
           <IcomoonReact
             className="search-icon"
             iconSet={iconSet}
