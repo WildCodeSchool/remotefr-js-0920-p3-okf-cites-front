@@ -11,7 +11,7 @@ export default function SingleCard({ animalsCards }) {
             <img
               className={styles.animalPic}
               alt={styles.scientificName}
-              src={animalCard.photo}
+              src={animalCard.image_url}
             />
             <figcaption className={styles.caption}>
               {animalCard.cites}
@@ -20,7 +20,13 @@ export default function SingleCard({ animalsCards }) {
 
           <h2 className={styles.vernacular}>{animalCard.common_name}</h2>
           <h3 className={styles.scientific}>{animalCard.name}</h3>
-          <p className={styles.resume}>{animalCard.descrpition}</p>
+          <p className={styles.resume}>
+            Il est constitué d'une combinaison d'atomes de carbone, d'oxygène et
+            d'hydrogène. Ainsi, la matière vivante est constituée de molécules
+            contenant, entre autres, du carbone, qui a été absorbé de
+            différentes manières dans l'environnement (eau, air, aliments).
+          </p>
+          <button type="button">ajouter des informations</button>
         </div>
       ))}
     </div>
