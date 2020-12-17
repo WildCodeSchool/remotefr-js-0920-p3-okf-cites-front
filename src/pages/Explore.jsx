@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import Searchbar from '../components/Searchbar';
 import SingleCard from '../components/SingleCard';
 import Filters from '../components/Filters';
 import styles from './Explore.module.css';
 import elephantLogo from '../assets/elephant-logo.png';
+import { debounce, useEffectAfterMount, useMount } from '../utils';
 
 function ExploreHeader({ searchValue, onSearchChange, onSearchSubmit }) {
   return (
@@ -43,18 +44,34 @@ export default function Explore() {
   const [searchQuery, setSearchQuery] = useState('');
   const [filters, setFilters] = useState({
     animal: [],
-    flore: false,
+    plant: false,
     cites: [],
   });
 
-  const [animals, setAnimals] = useState(null);
+  const [species, setSpecies] = useState(null);
 
-  useEffect(() => {
-    const url = `http://localhost:5000/explore/search?search=${searchQuery}`;
+  const fetchSpecies = useCallback((searchQuery_, filters_, setSpecies_) => {
+    const url = new URL(`http://localhost:5000/explore/search`);
+    url.searchParams.append('query', searchQuery_);
+    url.searchParams.append('plant', filters_.plant);
+    filters_.animal.forEach((animalClass) =>
+      url.searchParams.append('animal[]', animalClass),
+    );
+    filters_.cites.forEach((c) => url.searchParams.append('cites[]', c));
+
     fetch(url)
       .then((response) => response.json())
-      .then((data) => setAnimals(data));
-  }, [searchQuery]);
+      .then((data) => setSpecies_(data));
+  }, []);
+  const fetchSpeciesDebounced = useCallback(debounce(fetchSpecies, 1000), []);
+
+  useMount(() => {
+    fetchSpecies(searchQuery, filters, setSpecies);
+  });
+
+  useEffectAfterMount(() => {
+    fetchSpeciesDebounced(searchQuery, filters, setSpecies);
+  }, [searchQuery, filters, fetchSpeciesDebounced]);
 
   return (
     <>
@@ -105,7 +122,7 @@ export default function Explore() {
                     { name: 'reptilia', label: 'Reptilia', count: 100 },
                   ],
                 },
-                flore: {
+                plant: {
                   label: 'Flore',
                 },
                 cites: {
@@ -133,7 +150,7 @@ export default function Explore() {
               onSelect={setFilters}
             />
           </aside>
-          <main>{animals ? <SingleCard animalsCards={animals} /> : ''}</main>
+          <main>{species ? <SingleCard animalsCards={species} /> : ''}</main>
         </div>
       </section>
     </>

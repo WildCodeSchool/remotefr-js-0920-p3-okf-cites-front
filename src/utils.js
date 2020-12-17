@@ -1,3 +1,5 @@
+import { useEffect, useRef } from 'react';
+
 export function slugify(string) {
   const a =
     'àáâäæãåāăąçćčđďèéêëēėęěğǵḧîïíīįìłḿñńǹňôöòóœøōõőṕŕřßśšşșťțûüùúūǘůűųẃẍÿýžźż·/_,:;';
@@ -24,3 +26,28 @@ export function objectFillValues(obj, value) {
     return newObj;
   }, {});
 }
+
+export function debounce(fn, wait) {
+  let timeout;
+  return (...args) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => fn(...args), wait);
+  };
+}
+
+export function useMount(fn) {
+  useEffect(fn, []);
+}
+
+/* eslint-disable react-hooks/exhaustive-deps */
+export function useEffectAfterMount(fn, deps) {
+  const isMountRef = useRef(true);
+
+  useEffect(() => {
+    if (!isMountRef.current) {
+      fn();
+    }
+    isMountRef.current = false;
+  }, deps);
+}
+/* eslint-enable react-hooks/exhaustive-deps */
