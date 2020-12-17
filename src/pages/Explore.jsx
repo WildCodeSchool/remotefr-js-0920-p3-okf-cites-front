@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Searchbar from '../components/Searchbar';
 import SingleCard from '../components/SingleCard';
@@ -16,8 +16,6 @@ function ExploreHeader({ searchValue, onSearchChange, onSearchSubmit }) {
             src={elephantLogo}
             alt="Dessin éléphant noir sur fond transparent"
             id="elephant-logo"
-            width="55"
-            height="55"
           />
           <h1 className={styles.headerTitle}>Mémoires d&apos;Éléphant</h1>
         </div>
@@ -49,6 +47,15 @@ export default function Explore() {
     cites: [],
   });
 
+  const [animals, setAnimals] = useState(null);
+
+  useEffect(() => {
+    const url = `http://localhost:5000/explore/search?search=${searchQuery}`;
+    fetch(url)
+      .then((response) => response.json())
+      .then((data) => setAnimals(data));
+  }, [searchQuery]);
+
   return (
     <>
       <ExploreHeader
@@ -58,7 +65,6 @@ export default function Explore() {
         }}
         onSearchSubmit={(e) => {
           e.preventDefault();
-          alert('Search submit');
         }}
       />
       <section className={styles.background}>
@@ -127,9 +133,7 @@ export default function Explore() {
               onSelect={setFilters}
             />
           </aside>
-          <main>
-            <SingleCard />
-          </main>
+          <main>{animals ? <SingleCard animalsCards={animals} /> : ''}</main>
         </div>
       </section>
     </>
