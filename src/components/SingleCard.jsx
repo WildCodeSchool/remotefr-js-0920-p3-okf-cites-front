@@ -6,11 +6,11 @@ export default function SingleCard({ animalsCards }) {
   return (
     <div className={styles.cardContainer}>
       {animalsCards.map((animalCard) => (
-        <div className={styles.singleCard}>
+        <div className={styles.singleCard} key={animalCard.id}>
           <figure className={styles.picCard}>
             <img
               className={styles.animalPic}
-              alt={styles.scientificName}
+              alt={animalCard.name}
               src={animalCard.image_url}
             />
             <figcaption className={styles.caption}>
@@ -34,5 +34,12 @@ export default function SingleCard({ animalsCards }) {
 }
 
 SingleCard.propTypes = {
-  animalsCards: PropTypes.string.isRequired,
+  animalsCards: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      image_url: PropTypes.string,
+      cites: PropTypes.string,
+      common_name: PropTypes.string,
+    }),
+  ).isRequired,
 };
