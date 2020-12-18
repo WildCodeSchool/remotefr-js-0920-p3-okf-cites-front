@@ -42,36 +42,123 @@ ExploreHeader.propTypes = {
 
 export default function Explore() {
   const [searchQuery, setSearchQuery] = useState('');
-  const [filters, setFilters] = useState({
+  const [filtersSelected, setFiltersSelected] = useState({
     animal: [],
     plant: false,
     cites: [],
   });
 
+  const [filters, setFilters] = useState({
+    animal: {
+      label: 'Faune',
+      childFilters: [
+        { name: 'actinopteri', label: 'Actinopteri' },
+        { name: 'amphibia', label: 'Amphibia' },
+        { name: 'anthozoa', label: 'Anthozoa' },
+        { name: 'arachnida', label: 'Arachnida' },
+        { name: 'aves', label: 'Aves' },
+        { name: 'bivalvia', label: 'Bivalvia' },
+        { name: 'coelacanthi', label: 'Coelacanthi' },
+        { name: 'dipneusti', label: 'Dipneusti' },
+        { name: 'elasmobranchii', label: 'Elasmobranchii' },
+        { name: 'gastropoda', label: 'Gastropoda' },
+        { name: 'hirudinoidea', label: 'Hirudinoidea' },
+        { name: 'holothuroidea', label: 'Holothuroidea' },
+        { name: 'hydrozoa', label: 'Hydrozoa' },
+        { name: 'insecta', label: 'Insecta' },
+        { name: 'mammalia', label: 'Mammalia' },
+        { name: 'reptilia', label: 'Reptilia' },
+      ],
+    },
+    plant: {
+      label: 'Flore',
+    },
+    cites: {
+      label: 'Annexe CITES',
+      childFilters: [
+        {
+          name: 'I',
+          label: 'Espèces menacées (Annexe I)',
+        },
+        {
+          name: 'II',
+          label: 'Espèces vulnérables (Annexe II)',
+        },
+        {
+          name: 'III',
+          label: 'Espèces vulnérables (Annexe III)',
+        },
+      ],
+    },
+  });
   const [species, setSpecies] = useState(null);
+  const [totalCount, setTotalCount] = useState('?');
 
-  const fetchSpecies = useCallback((searchQuery_, filters_, setSpecies_) => {
-    const url = new URL(`http://localhost:5000/species/search`);
-    url.searchParams.append('query', searchQuery_);
-    url.searchParams.append('plant', filters_.plant);
-    filters_.animal.forEach((animalClass) =>
-      url.searchParams.append('animal[]', animalClass),
-    );
-    filters_.cites.forEach((c) => url.searchParams.append('cites[]', c));
+  // Pass state by argument to avoid stale references while keeping the same function reference to debounce
+  const fetchSpecies = useCallback(
+    async (
+      searchQuery_,
+      filtersSelected_,
+      setSpecies_,
+      setFilters_,
+      setTotalCount_,
+    ) => {
+      const url = new URL(`http://localhost:5000/species/search`);
+      url.searchParams.append('query', searchQuery_);
+      url.searchParams.append('plant', filtersSelected_.plant);
+      filtersSelected_.animal.forEach((animalClass) =>
+        url.searchParams.append('animal[]', animalClass),
+      );
+      filtersSelected_.cites.forEach((c) =>
+        url.searchParams.append('cites[]', c),
+      );
 
-    fetch(url)
-      .then((response) => response.json())
-      .then((data) => setSpecies_(data));
-  }, []);
+      const res = await fetch(url);
+      const { species: newSpecies, counts } = await res.json();
+
+      setSpecies_(newSpecies);
+      setFilters_((oldFilters) => {
+        const newFilters = { ...oldFilters };
+
+        // eslint-disable-next-line no-restricted-syntax
+        for (const filter of newFilters.animal.childFilters) {
+          filter.count = counts.animalClass[filter.name];
+        }
+
+        newFilters.plant.count = counts.plant;
+
+        // eslint-disable-next-line no-restricted-syntax
+        for (const filter of newFilters.cites.childFilters) {
+          filter.count = counts.cites[filter.name];
+        }
+
+        return newFilters;
+      });
+      setTotalCount_(counts.total);
+    },
+    [],
+  );
   const fetchSpeciesDebounced = useCallback(debounce(fetchSpecies, 1000), []);
 
   useMount(() => {
-    fetchSpecies(searchQuery, filters, setSpecies);
+    fetchSpecies(
+      searchQuery,
+      filtersSelected,
+      setSpecies,
+      setFilters,
+      setTotalCount,
+    );
   });
 
   useEffectAfterMount(() => {
-    fetchSpeciesDebounced(searchQuery, filters, setSpecies);
-  }, [searchQuery, filters, fetchSpeciesDebounced]);
+    fetchSpeciesDebounced(
+      searchQuery,
+      filtersSelected,
+      setSpecies,
+      setFilters,
+      setTotalCount,
+    );
+  }, [searchQuery, filtersSelected, fetchSpeciesDebounced]);
 
   return (
     <>
@@ -88,66 +175,13 @@ export default function Explore() {
         <div className={styles.content}>
           <aside className={styles.filterBox}>
             <h2>
-              <span className={styles.filterBoxCount}>18234</span> espèces
-              référencées
+              <span className={styles.filterBoxCount}>{totalCount}</span>{' '}
+              espèces référencées
             </h2>
             <Filters
-              filters={{
-                animal: {
-                  label: 'Faune',
-                  childFilters: [
-                    { name: 'actinopteri', label: 'Actinopteri', count: 100 },
-                    { name: 'amphibia', label: 'Amphibia', count: 100 },
-                    { name: 'anthozoa', label: 'Anthozoa', count: 100 },
-                    { name: 'arachnida', label: 'Arachnida', count: 100 },
-                    { name: 'aves', label: 'Aves', count: 100 },
-                    { name: 'bivalvia', label: 'Bivalvia', count: 100 },
-                    { name: 'coelacanthi', label: 'Coelacanthi', count: 100 },
-                    { name: 'dipneusti', label: 'Dipneusti', count: 100 },
-                    {
-                      name: 'elasmobranchii',
-                      label: 'Elasmobranchii',
-                      count: 100,
-                    },
-                    { name: 'gastropoda', label: 'Gastropoda', count: 100 },
-                    { name: 'hirudinoidea', label: 'Hirudinoidea', count: 100 },
-                    {
-                      name: 'holothuroidea',
-                      label: 'Holothuroidea',
-                      count: 100,
-                    },
-                    { name: 'hydrozoa', label: 'Hydrozoa', count: 100 },
-                    { name: 'insecta', label: 'Insecta', count: 100 },
-                    { name: 'mammalia', label: 'Mammalia', count: 100 },
-                    { name: 'reptilia', label: 'Reptilia', count: 100 },
-                  ],
-                },
-                plant: {
-                  label: 'Flore',
-                },
-                cites: {
-                  label: 'Annexe CITES',
-                  childFilters: [
-                    {
-                      name: 'I',
-                      label: 'Espèces menacées (Annexe I)',
-                      count: 1,
-                    },
-                    {
-                      name: 'II',
-                      label: 'Espèces vulnérables (Annexe II)',
-                      count: 12,
-                    },
-                    {
-                      name: 'III',
-                      label: 'Espèces vulnérables (Annexe III)',
-                      count: 123,
-                    },
-                  ],
-                },
-              }}
-              selected={filters}
-              onSelect={setFilters}
+              filters={filters}
+              selected={filtersSelected}
+              onSelect={setFiltersSelected}
             />
           </aside>
           <main>{species ? <SingleCard animalsCards={species} /> : ''}</main>

@@ -5,6 +5,7 @@ import styles from './Filters.module.css';
 function FilterWithChildFilters({
   name,
   label,
+  count,
   childFilters,
   selected,
   onSelect,
@@ -44,7 +45,7 @@ function FilterWithChildFilters({
           ref={parentCheckRef}
         />
         <span className={styles.parentLabelText}>{label}</span>
-        <span className={styles.count} /> {/* To fill grid space */}
+        <span className={styles.count}>{count}</span>
       </label>
 
       {/* Child filters */}
@@ -73,6 +74,7 @@ function FilterWithChildFilters({
 FilterWithChildFilters.propTypes = {
   name: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
+  count: PropTypes.number,
   childFilters: PropTypes.arrayOf(
     PropTypes.shape({
       name: PropTypes.string,
@@ -82,6 +84,9 @@ FilterWithChildFilters.propTypes = {
   ).isRequired,
   selected: PropTypes.arrayOf(PropTypes.string).isRequired,
   onSelect: PropTypes.func.isRequired,
+};
+FilterWithChildFilters.defaultProps = {
+  count: null,
 };
 export default function Filters({ filters, selected, onSelect }) {
   const handleOnSelect = (name) => (newSelected) => {
@@ -97,6 +102,7 @@ export default function Filters({ filters, selected, onSelect }) {
             <FilterWithChildFilters
               name={name}
               label={filter.label}
+              count={filter.count}
               childFilters={filter.childFilters}
               selected={selected[name]}
               onSelect={handleOnSelect(name)}
@@ -113,7 +119,7 @@ export default function Filters({ filters, selected, onSelect }) {
                 }}
               />
               <span className={styles.parentLabelText}>{filter.label}</span>
-              <span className={styles.count} /> {/* To fill grid space */}
+              <span className={styles.count}>{filter.count} </span>
             </label>
           )}
         </li>
@@ -125,6 +131,7 @@ Filters.propTypes = {
   filters: PropTypes.objectOf(
     PropTypes.shape({
       label: PropTypes.string,
+      count: PropTypes.number,
       childFilters: PropTypes.arrayOf(
         PropTypes.shape({
           name: PropTypes.string,
