@@ -51,7 +51,7 @@ export default function Explore() {
   const [species, setSpecies] = useState(null);
 
   const fetchSpecies = useCallback((searchQuery_, filters_, setSpecies_) => {
-    const url = new URL(`http://localhost:5000/explore/search`);
+    const url = new URL(`http://localhost:5000/species/search`);
     url.searchParams.append('query', searchQuery_);
     url.searchParams.append('plant', filters_.plant);
     filters_.animal.forEach((animalClass) =>
