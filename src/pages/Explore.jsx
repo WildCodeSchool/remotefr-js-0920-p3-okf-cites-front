@@ -2,10 +2,15 @@ import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import Searchbar from '../components/Searchbar';
 import SingleCard from '../components/SingleCard';
-import Filters from '../components/Filters';
 import styles from './Explore.module.css';
 import elephantLogo from '../assets/elephant-logo.png';
 import { debounce, useEffectAfterMount, useMount } from '../utils';
+import {
+  Filter,
+  FilterBoolean,
+  FilterGroup,
+  FilterOption,
+} from '../components/Filters';
 
 function ExploreHeader({ searchValue, onSearchChange, onSearchSubmit }) {
   return (
@@ -48,61 +53,14 @@ export default function Explore() {
     cites: [],
   });
 
-  const [filters, setFilters] = useState({
-    animal: {
-      label: 'Faune',
-      childFilters: [
-        { name: 'actinopteri', label: 'Actinopteri' },
-        { name: 'amphibia', label: 'Amphibia' },
-        { name: 'anthozoa', label: 'Anthozoa' },
-        { name: 'arachnida', label: 'Arachnida' },
-        { name: 'aves', label: 'Aves' },
-        { name: 'bivalvia', label: 'Bivalvia' },
-        { name: 'coelacanthi', label: 'Coelacanthi' },
-        { name: 'dipneusti', label: 'Dipneusti' },
-        { name: 'elasmobranchii', label: 'Elasmobranchii' },
-        { name: 'gastropoda', label: 'Gastropoda' },
-        { name: 'hirudinoidea', label: 'Hirudinoidea' },
-        { name: 'holothuroidea', label: 'Holothuroidea' },
-        { name: 'hydrozoa', label: 'Hydrozoa' },
-        { name: 'insecta', label: 'Insecta' },
-        { name: 'mammalia', label: 'Mammalia' },
-        { name: 'reptilia', label: 'Reptilia' },
-      ],
-    },
-    plant: {
-      label: 'Flore',
-    },
-    cites: {
-      label: 'Annexe CITES',
-      childFilters: [
-        {
-          name: 'I',
-          label: 'Espèces menacées (Annexe I)',
-        },
-        {
-          name: 'II',
-          label: 'Espèces vulnérables (Annexe II)',
-        },
-        {
-          name: 'III',
-          label: 'Espèces vulnérables (Annexe III)',
-        },
-      ],
-    },
+  const [counts, setCounts] = useState({
+    total: '?',
   });
   const [species, setSpecies] = useState(null);
-  const [totalCount, setTotalCount] = useState('?');
 
   // Pass state by argument to avoid stale references while keeping the same function reference to debounce
   const fetchSpecies = useCallback(
-    async (
-      searchQuery_,
-      filtersSelected_,
-      setSpecies_,
-      setFilters_,
-      setTotalCount_,
-    ) => {
+    async (searchQuery_, filtersSelected_, setSpecies_, setCounts_) => {
       const url = new URL(`http://localhost:5000/species/search`);
       url.searchParams.append('query', searchQuery_);
       url.searchParams.append('plant', filtersSelected_.plant);
@@ -114,50 +72,21 @@ export default function Explore() {
       );
 
       const res = await fetch(url);
-      const { species: newSpecies, counts } = await res.json();
+      const { species: newSpecies, counts: counts_ } = await res.json();
 
       setSpecies_(newSpecies);
-      setFilters_((oldFilters) => {
-        const newFilters = { ...oldFilters };
-
-        // eslint-disable-next-line no-restricted-syntax
-        for (const filter of newFilters.animal.childFilters) {
-          filter.count = counts.animalClass[filter.name];
-        }
-
-        newFilters.plant.count = counts.plant;
-
-        // eslint-disable-next-line no-restricted-syntax
-        for (const filter of newFilters.cites.childFilters) {
-          filter.count = counts.cites[filter.name];
-        }
-
-        return newFilters;
-      });
-      setTotalCount_(counts.total);
+      setCounts_(counts_);
     },
     [],
   );
   const fetchSpeciesDebounced = useCallback(debounce(fetchSpecies, 1000), []);
 
   useMount(() => {
-    fetchSpecies(
-      searchQuery,
-      filtersSelected,
-      setSpecies,
-      setFilters,
-      setTotalCount,
-    );
+    fetchSpecies(searchQuery, filtersSelected, setSpecies, setCounts);
   });
 
   useEffectAfterMount(() => {
-    fetchSpeciesDebounced(
-      searchQuery,
-      filtersSelected,
-      setSpecies,
-      setFilters,
-      setTotalCount,
-    );
+    fetchSpeciesDebounced(searchQuery, filtersSelected, setSpecies, setCounts);
   }, [searchQuery, filtersSelected, fetchSpeciesDebounced]);
 
   return (
@@ -175,14 +104,115 @@ export default function Explore() {
         <div className={styles.content}>
           <aside className={styles.filterBox}>
             <h2>
-              <span className={styles.filterBoxCount}>{totalCount}</span>{' '}
+              <span className={styles.filterBoxCount}>{counts.total}</span>{' '}
               espèces référencées
             </h2>
-            <Filters
-              filters={filters}
+
+            <FilterGroup
               selected={filtersSelected}
               onSelect={setFiltersSelected}
-            />
+            >
+              <Filter name="animal" label="Faune" count={0}>
+                <FilterOption
+                  value="actinopteri"
+                  label="Actinopteri"
+                  count={counts.animalClass?.actinopteri}
+                />
+                <FilterOption
+                  value="amphibia"
+                  label="Amphibia"
+                  count={counts.animalClass?.amphibia}
+                />
+                <FilterOption
+                  value="anthozoa"
+                  label="Anthozoa"
+                  count={counts.animalClass?.anthozoa}
+                />
+                <FilterOption
+                  value="arachnida"
+                  label="Arachnida"
+                  count={counts.animalClass?.arachnida}
+                />
+                <FilterOption
+                  value="aves"
+                  label="Aves"
+                  count={counts.animalClass?.aves}
+                />
+                <FilterOption
+                  value="bivalvia"
+                  label="Bivalvia"
+                  count={counts.animalClass?.bivalvia}
+                />
+                <FilterOption
+                  value="coelacanthi"
+                  label="Coelacanthi"
+                  count={counts.animalClass?.coelacanthi}
+                />
+                <FilterOption
+                  value="dipneusti"
+                  label="Dipneusti"
+                  count={counts.animalClass?.dipneusti}
+                />
+                <FilterOption
+                  value="elasmobranchii"
+                  label="Elasmobranchii"
+                  count={counts.animalClass?.elasmobranchii}
+                />
+                <FilterOption
+                  value="gastropoda"
+                  label="Gastropoda"
+                  count={counts.animalClass?.gastropoda}
+                />
+                <FilterOption
+                  value="hirudinoidea"
+                  label="Hirudinoidea"
+                  count={counts.animalClass?.hirudinoidea}
+                />
+                <FilterOption
+                  value="holothuroidea"
+                  label="Holothuroidea"
+                  count={counts.animalClass?.holothuroidea}
+                />
+                <FilterOption
+                  value="hydrozoa"
+                  label="Hydrozoa"
+                  count={counts.animalClass?.hydrozoa}
+                />
+                <FilterOption
+                  value="insecta"
+                  label="Insecta"
+                  count={counts.animalClass?.insecta}
+                />
+                <FilterOption
+                  value="mammalia"
+                  label="Mammalia"
+                  count={counts.animalClass?.mammalia}
+                />
+                <FilterOption
+                  value="reptilia"
+                  label="Reptilia"
+                  count={counts.animalClass?.reptilia}
+                />
+              </Filter>
+              <FilterBoolean name="plant" label="Flore" />
+              <Filter name="cites" label="Annexe CITES">
+                <FilterOption
+                  value="I"
+                  label="Espèces menacées (Annexe I)"
+                  count={counts.cites?.I}
+                />
+                <FilterOption
+                  value="II"
+                  label="Espèces vulnérables (Annexe II)"
+                  count={counts.cites?.II}
+                />
+                <FilterOption
+                  value="III"
+                  label="Espèces vulnérables (Annexe III)"
+                  count={counts.cites?.III}
+                />
+              </Filter>
+            </FilterGroup>
           </aside>
           <main>{species ? <SingleCard animalsCards={species} /> : ''}</main>
         </div>

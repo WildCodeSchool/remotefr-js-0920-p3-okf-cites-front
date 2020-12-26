@@ -2,47 +2,43 @@ import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import styles from './Filters.module.css';
 
-function FilterWithChildFilters({
-  name,
-  label,
-  count,
-  childFilters,
-  selected,
-  onSelect,
-}) {
-  const parentCheckRef = useRef();
-  const parentCheckId = `check-${name}`;
+export function Filter({ name, label, count, children, selected, onSelect }) {
+  const inputRef = useRef();
+  const inputId = `check-option-${name}`;
 
-  const isAllChecked = selected.length === childFilters.length;
+  const filterOptionCount = React.Children.count(children);
+  const isAllChecked = selected.length === filterOptionCount;
 
   useEffect(() => {
     // Indeterminate if some but not all sub filters are checked
-    parentCheckRef.current.indeterminate =
-      selected.length > 0 && selected.length < childFilters.length;
-  }, [selected, childFilters]);
+    inputRef.current.indeterminate =
+      selected.length > 0 && selected.length < filterOptionCount;
+  }, [selected, filterOptionCount]);
 
-  const handleParentChange = (e) => {
-    onSelect(e.target.checked ? childFilters.map((c) => c.name) : []);
+  const handleChange = (e) => {
+    onSelect(
+      e.target.checked
+        ? React.Children.map(children, (c) => c.props.value)
+        : [],
+    );
   };
 
-  const handleChildfilterChange = (key) => (e) => {
+  const handleChildChange = (key) => (e) => {
     onSelect(
       e.target.checked ? [...selected, key] : selected.filter((s) => s !== key),
     );
   };
 
-  const selectedSet = new Set(selected);
-
   return (
     <>
       {/* Parent filter */}
-      <label htmlFor={parentCheckId} className={styles.label}>
+      <label htmlFor={inputId} className={styles.label}>
         <input
-          id={parentCheckId}
+          id={inputId}
           type="checkbox"
           checked={isAllChecked}
-          onChange={handleParentChange}
-          ref={parentCheckRef}
+          onChange={handleChange}
+          ref={inputRef}
         />
         <span className={styles.parentLabelText}>{label}</span>
         <span className={styles.count}>{count}</span>
@@ -50,99 +46,116 @@ function FilterWithChildFilters({
 
       {/* Child filters */}
       <ul className={styles.filterList}>
-        {childFilters.map((child) => {
-          const childCheckId = `${parentCheckId}-${child.name}`;
-          return (
-            <li key={child.name} className={styles.filterListItem}>
-              <label htmlFor={childCheckId} className={styles.label}>
-                <input
-                  id={childCheckId}
-                  type="checkbox"
-                  checked={selectedSet.has(child.name)}
-                  onChange={handleChildfilterChange(child.name)}
-                />
-                <span>{child.label}</span>
-                <span className={styles.count}>{child.count}</span>
-              </label>
-            </li>
-          );
-        })}
+        {React.Children.map(children, (option) => (
+          <li key={option.props.value} className={styles.filterListItem}>
+            {React.cloneElement(option, {
+              isSelected: selected.includes(option.props.value),
+              onSelect: handleChildChange(option.props.value),
+            })}
+          </li>
+        ))}
       </ul>
     </>
   );
 }
-FilterWithChildFilters.propTypes = {
+Filter.propTypes = {
   name: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
-  count: PropTypes.number,
-  childFilters: PropTypes.arrayOf(
-    PropTypes.shape({
-      name: PropTypes.string,
-      label: PropTypes.string,
-      count: PropTypes.number,
-    }),
-  ).isRequired,
-  selected: PropTypes.arrayOf(PropTypes.string).isRequired,
-  onSelect: PropTypes.func.isRequired,
+  count: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  children: PropTypes.node.isRequired,
+  selected: PropTypes.arrayOf(PropTypes.string),
+  onSelect: PropTypes.func,
 };
-FilterWithChildFilters.defaultProps = {
+Filter.defaultProps = {
   count: null,
+  selected: null, // Passed on by <FilterGroup />
+  onSelect: null, // Passed on by <FilterGroup />
 };
-export default function Filters({ filters, selected, onSelect }) {
-  const handleOnSelect = (name) => (newSelected) => {
-    onSelect({ ...selected, [name]: newSelected });
+/**
+ * Selectable option inside a {@see Filter}
+ */
+export function FilterOption({ value, label, count, isSelected, onSelect }) {
+  const inputId = `check-option-${value}`;
+
+  return (
+    <label htmlFor={inputId} className={styles.label}>
+      <input
+        id={inputId}
+        type="checkbox"
+        checked={isSelected}
+        onChange={onSelect}
+      />
+      <span>{label}</span>
+      <span className={styles.count}>{count}</span>
+    </label>
+  );
+}
+FilterOption.propTypes = {
+  value: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+  count: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  isSelected: PropTypes.bool, // Passed on by <Filter />
+  onSelect: PropTypes.func, // Passed on by <Filter />
+};
+FilterOption.defaultProps = {
+  count: null,
+  isSelected: null, // Passed on by <Filter />
+  onSelect: null, // Passed on by <Filter />
+};
+
+export function FilterBoolean({ name, label, count, selected, onSelect }) {
+  const inputId = `check-${name}`;
+
+  return (
+    <label htmlFor={inputId} className={styles.label}>
+      <input
+        id={inputId}
+        type="checkbox"
+        checked={selected}
+        onChange={(e) => {
+          onSelect(e.target.checked);
+        }}
+      />
+      <span className={styles.parentLabelText}>{label}</span>
+      <span className={styles.count}>{count} </span>
+    </label>
+  );
+}
+FilterBoolean.propTypes = {
+  name: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+  count: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  selected: PropTypes.bool,
+  onSelect: PropTypes.func,
+};
+FilterBoolean.defaultProps = {
+  count: null,
+  selected: null, // Passed on by <FilterGroup />
+  onSelect: null, // Passed on by <FilterGroup />
+};
+
+export function FilterGroup({ selected, onSelect, children }) {
+  const handleSelect = (name) => (newValue) => {
+    onSelect({ ...selected, [name]: newValue });
   };
 
   return (
     <ul className={styles.filterGrid}>
-      {Object.entries(filters).map(([name, filter]) => (
-        <li key={name} className={styles.filterListItem}>
-          {filter.childFilters !== undefined ? (
-            // Filter with child filters
-            <FilterWithChildFilters
-              name={name}
-              label={filter.label}
-              count={filter.count}
-              childFilters={filter.childFilters}
-              selected={selected[name]}
-              onSelect={handleOnSelect(name)}
-            />
-          ) : (
-            // Filter with no child filter
-            <label htmlFor={`check-${name}`} className={styles.label}>
-              <input
-                id={`check-${name}`}
-                type="checkbox"
-                checked={selected[name]}
-                onChange={(e) => {
-                  handleOnSelect(name)(e.target.checked);
-                }}
-              />
-              <span className={styles.parentLabelText}>{filter.label}</span>
-              <span className={styles.count}>{filter.count} </span>
-            </label>
-          )}
+      {React.Children.map(children, (filter) => (
+        <li key={filter.props.name} className={styles.filterListItem}>
+          {React.cloneElement(filter, {
+            selected: selected[filter.props.name],
+            onSelect: handleSelect(filter.props.name),
+          })}
         </li>
       ))}
     </ul>
   );
 }
-Filters.propTypes = {
-  filters: PropTypes.objectOf(
-    PropTypes.shape({
-      label: PropTypes.string,
-      count: PropTypes.number,
-      childFilters: PropTypes.arrayOf(
-        PropTypes.shape({
-          name: PropTypes.string,
-          label: PropTypes.string,
-          count: PropTypes.number,
-        }),
-      ),
-    }),
-  ).isRequired,
+FilterGroup.propTypes = {
   selected: PropTypes.objectOf(
     PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.string), PropTypes.bool]),
   ).isRequired,
   onSelect: PropTypes.func.isRequired,
+  children: PropTypes.node.isRequired,
 };
