@@ -112,89 +112,97 @@ export default function Explore() {
               selected={filtersSelected}
               onSelect={setFiltersSelected}
             >
-              <Filter name="animal" label="Faune" count={0}>
+              <Filter
+                name="animal"
+                label="Faune"
+                count={counts.kingdom?.animalia}
+              >
                 <FilterOption
                   value="actinopteri"
                   label="Actinopteri"
-                  count={counts.animalClass?.actinopteri}
+                  count={counts.class?.actinopteri}
                 />
                 <FilterOption
                   value="amphibia"
                   label="Amphibia"
-                  count={counts.animalClass?.amphibia}
+                  count={counts.class?.amphibia}
                 />
                 <FilterOption
                   value="anthozoa"
                   label="Anthozoa"
-                  count={counts.animalClass?.anthozoa}
+                  count={counts.class?.anthozoa}
                 />
                 <FilterOption
                   value="arachnida"
                   label="Arachnida"
-                  count={counts.animalClass?.arachnida}
+                  count={counts.class?.arachnida}
                 />
                 <FilterOption
                   value="aves"
                   label="Aves"
-                  count={counts.animalClass?.aves}
+                  count={counts.class?.aves}
                 />
                 <FilterOption
                   value="bivalvia"
                   label="Bivalvia"
-                  count={counts.animalClass?.bivalvia}
+                  count={counts.class?.bivalvia}
                 />
                 <FilterOption
                   value="coelacanthi"
                   label="Coelacanthi"
-                  count={counts.animalClass?.coelacanthi}
+                  count={counts.class?.coelacanthi}
                 />
                 <FilterOption
                   value="dipneusti"
                   label="Dipneusti"
-                  count={counts.animalClass?.dipneusti}
+                  count={counts.class?.dipneusti}
                 />
                 <FilterOption
                   value="elasmobranchii"
                   label="Elasmobranchii"
-                  count={counts.animalClass?.elasmobranchii}
+                  count={counts.class?.elasmobranchii}
                 />
                 <FilterOption
                   value="gastropoda"
                   label="Gastropoda"
-                  count={counts.animalClass?.gastropoda}
+                  count={counts.class?.gastropoda}
                 />
                 <FilterOption
                   value="hirudinoidea"
                   label="Hirudinoidea"
-                  count={counts.animalClass?.hirudinoidea}
+                  count={counts.class?.hirudinoidea}
                 />
                 <FilterOption
                   value="holothuroidea"
                   label="Holothuroidea"
-                  count={counts.animalClass?.holothuroidea}
+                  count={counts.class?.holothuroidea}
                 />
                 <FilterOption
                   value="hydrozoa"
                   label="Hydrozoa"
-                  count={counts.animalClass?.hydrozoa}
+                  count={counts.class?.hydrozoa}
                 />
                 <FilterOption
                   value="insecta"
                   label="Insecta"
-                  count={counts.animalClass?.insecta}
+                  count={counts.class?.insecta}
                 />
                 <FilterOption
                   value="mammalia"
                   label="Mammalia"
-                  count={counts.animalClass?.mammalia}
+                  count={counts.class?.mammalia}
                 />
                 <FilterOption
                   value="reptilia"
                   label="Reptilia"
-                  count={counts.animalClass?.reptilia}
+                  count={counts.class?.reptilia}
                 />
               </Filter>
-              <FilterBoolean name="plant" label="Flore" />
+              <FilterBoolean
+                name="plant"
+                label="Flore"
+                count={counts.kingdom?.plantae}
+              />
               <Filter name="cites" label="Annexe CITES">
                 <FilterOption
                   value="I"
