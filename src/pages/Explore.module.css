@@ -48,3 +48,7 @@
 .filterBoxCount {
   color: var(--dark-blue);
 }
+
+.main {
+  width: 100%;
+}

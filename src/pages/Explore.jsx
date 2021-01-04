@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import Searchbar from '../components/Searchbar';
-import SingleCard from '../components/SingleCard';
+import { SpeciesCardList } from '../components/SpeciesCard';
 import styles from './Explore.module.css';
 import elephantLogo from '../assets/elephant-logo.png';
 import { debounce, useEffectAfterMount, useMount } from '../utils';
@@ -222,7 +222,9 @@ export default function Explore() {
               </Filter>
             </FilterGroup>
           </aside>
-          <main>{species ? <SingleCard animalsCards={species} /> : ''}</main>
+          <main className={styles.main}>
+            {species ? <SpeciesCardList species={species} /> : ''}
+          </main>
         </div>
       </section>
     </>

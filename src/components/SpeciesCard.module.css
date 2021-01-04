@@ -1,0 +1,74 @@
+.cardList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
+
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.card {
+  --species-image-height: 250px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.figure {
+  position: relative;
+}
+
+.image {
+  object-fit: cover;
+  width: 300px;
+  height: var(--species-image-height);
+  border-radius: 20%;
+}
+
+.figcaption {
+  text-align: center;
+}
+
+.cites {
+  position: absolute;
+  top: calc(0.7 * var(--species-image-height)); /* 70% of image's height */
+  left: 0px;
+  padding: 0.25rem 0.75rem;
+
+  font-family: 'Raleway', sans-serif;
+  color: white;
+  text-transform: uppercase;
+
+  white-space: nowrap;
+}
+
+.citesI {
+  background-color: var(--danger);
+}
+.citesII {
+  background-color: var(--warning);
+}
+.citesIII {
+  background-color: var(--success);
+}
+
+.vernacular {
+  margin-bottom: 0;
+
+  font-family: 'Raleway', sans-serif;
+}
+
+.scientific {
+  margin-bottom: 0;
+  margin-top: 2%;
+
+  font-style: italic;
+  /* TODO Improve color contrast for a11y  */
+  color: var(--gray-blue);
+}
+
+.resume {
+  text-align: left;
+  margin-top: 2%;
+}
