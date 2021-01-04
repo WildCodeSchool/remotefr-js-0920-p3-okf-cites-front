@@ -1,10 +1,18 @@
 .cardList {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(325px, 100%), 1fr));
 
   list-style: none;
   padding: 0;
   margin: 0;
+}
+
+.link {
+  color: inherit;
+  text-decoration: inherit;
+}
+.link:hover {
+  text-decoration: underline;
 }
 
 .card {

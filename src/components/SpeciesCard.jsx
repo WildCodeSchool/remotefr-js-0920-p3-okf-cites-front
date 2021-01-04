@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import styles from './SpeciesCard.module.css';
 
 const citesText = {
@@ -16,27 +17,36 @@ const citesClass = {
   III: styles.citesIII,
 };
 
-export function SpeciesCard({ name, commonName, cites, summary, imageUrl }) {
+export function SpeciesCard({
+  id,
+  name,
+  commonName,
+  cites,
+  summary,
+  imageUrl,
+}) {
   return (
-    <article className={styles.card}>
-      <figure className={styles.figure}>
-        <img
-          className={styles.image}
-          alt="" // The species' name is already in the <figcaption>, no need to repeat the same info twice
-          src={imageUrl}
-        />
-        <figcaption className={styles.figcaption}>
-          <h2 className={styles.vernacular}>{commonName}</h2>
-          <span className={styles.scientific}>{name}</span>
+    <Link to={`/espece/${id}`} className={styles.link}>
+      <article className={styles.card}>
+        <figure className={styles.figure}>
+          <img
+            className={styles.image}
+            alt="" // The species' name is already in the <figcaption>, no need to repeat the same info twice
+            src={imageUrl}
+          />
+          <figcaption className={styles.figcaption}>
+            <h2 className={styles.vernacular}>{commonName}</h2>
+            <span className={styles.scientific}>{name}</span>
 
-          <span className={`${styles.cites} ${citesClass[cites]}`}>
-            {citesText[cites]}
-          </span>
-        </figcaption>
-      </figure>
+            <span className={`${styles.cites} ${citesClass[cites]}`}>
+              {citesText[cites]}
+            </span>
+          </figcaption>
+        </figure>
 
-      <p className={styles.resume}>{summary}</p>
-    </article>
+        <p className={styles.resume}>{summary}</p>
+      </article>
+    </Link>
   );
 }
 SpeciesCard.defaultProps = {
@@ -45,6 +55,7 @@ SpeciesCard.defaultProps = {
   imageUrl: '/placeholder.svg',
 };
 SpeciesCard.propTypes = {
+  id: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
   commonName: PropTypes.string,
   cites: PropTypes.oneOf(['I', 'I/II', 'II', 'III']).isRequired,
@@ -58,6 +69,7 @@ export function SpeciesCardList({ species }) {
       {species.map((singleSpecies) => (
         <li key={singleSpecies.id}>
           <SpeciesCard
+            id={singleSpecies.id}
             name={singleSpecies.name}
             commonName={singleSpecies.common_name ?? singleSpecies.commonName}
             cites={singleSpecies.cites}
@@ -72,6 +84,7 @@ export function SpeciesCardList({ species }) {
 SpeciesCardList.propTypes = {
   species: PropTypes.arrayOf(
     PropTypes.shape({
+      id: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired,
       common_name: PropTypes.string,
       image_url: PropTypes.string,
