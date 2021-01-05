@@ -1,7 +1,7 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
-
+import elephantLogo from '../assets/elephant-logo.png';
 import styles from './Navbar.module.css';
 
 const links = [
@@ -44,6 +44,16 @@ NavbarLink.propTypes = {
 export default function Navbar() {
   return (
     <nav className={styles.nav}>
+      <Link className={styles.navbarBrand} title="Page d'accueil" to="/">
+        <img
+          className={styles.brandLogo}
+          src={elephantLogo}
+          alt="Dessin éléphant noir sur fond transparent"
+          id="elephant-logo"
+        />
+        Mémoires <br /> d'Éléphant
+      </Link>
+
       <ul className={styles.navList}>
         {links.map((link) => (
           <li key={link.title}>

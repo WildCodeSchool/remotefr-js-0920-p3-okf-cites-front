@@ -1,11 +1,40 @@
 .nav {
   background-color: var(--light-gray);
+
+  display: flex;
+  flex-direction: row;
+}
+
+.navbarBrand {
+  display: flex;
+  align-items: center;
+
+  padding-left: 3rem;
+
+  font-family: 'Raleway', sans-serif;
+  font-weight: 800;
+  font-size: 2rem;
+
+  color: black;
+  text-decoration: inherit;
+}
+
+.brandLogo {
+  height: 2em;
+  margin: 0 1rem;
 }
 
 .navList {
+  --navbar-link-width: 15rem;
+
+  width: 100%;
+
   padding: 0;
-  padding-right: min(20rem, calc(100% - 45rem)); /* 20rem or remaining space */
   margin: 0;
+  margin-right: min(
+    20rem,
+    calc(100% - var(--navbar-link-width) * 3)
+  ); /* 20rem or remaining space */
   list-style: none;
 
   display: flex;
@@ -22,7 +51,7 @@
   text-decoration: none;
   color: var(--dark-blue);
 
-  width: 15rem;
+  width: var(--navbar-link-width);
   padding: 0.5rem 1rem;
 }
 
