@@ -1,8 +1,7 @@
 import React from 'react';
-import IcomoonReact from 'icomoon-react';
 import PropTypes from 'prop-types';
-import iconSet from '../assets/selection.json';
 import styles from './Searchbar.module.css';
+import Icon from './Icon';
 
 export default function Searchbar({ value, onChange, onSubmit }) {
   return (
@@ -26,13 +25,7 @@ export default function Searchbar({ value, onChange, onSubmit }) {
           type="submit"
           aria-label="Lancer la recherche"
         >
-          <IcomoonReact
-            className="search-icon"
-            iconSet={iconSet}
-            color="#FFF"
-            size={15}
-            icon="search"
-          />
+          <Icon color="white" size="1.25em" icon="search" />
         </button>
       </div>
     </form>
