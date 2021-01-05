@@ -21,6 +21,7 @@
 
 .image {
   object-fit: cover;
+  object-position: top;
   width: 300px;
   height: var(--species-image-height);
   border-radius: 20%;
