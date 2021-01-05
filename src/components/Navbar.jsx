@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import elephantLogo from '../assets/elephant-logo.png';
 import styles from './Navbar.module.css';
+import Icon from './Icon';
 
 const links = [
   {
@@ -42,6 +43,32 @@ NavbarLink.propTypes = {
 };
 
 export default function Navbar() {
+  const [open, setOpen] = useState(false);
+  const navbarListRef = useRef();
+
+  useEffect(() => {
+    const el = navbarListRef.current;
+
+    if (open) {
+      // Open menu
+
+      // Calculate expended height
+      el.style.height = 'auto';
+      const { height } = el.getBoundingClientRect();
+      el.style.height = '';
+
+      // Double requestAnimationFrame for the transition to work
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          el.style.height = `${height}px`;
+        });
+      });
+    } else {
+      // Close menu
+      el.style.height = '';
+    }
+  }, [open]);
+
   return (
     <nav className={styles.nav}>
       <Link className={styles.navbarBrand} title="Page d'accueil" to="/">
@@ -54,7 +81,20 @@ export default function Navbar() {
         Mémoires <br /> d'Éléphant
       </Link>
 
-      <ul className={styles.navList}>
+      <button
+        className={`${styles.burgerButton} ${open ? styles.active : ''}`}
+        type="button"
+        title={`${open ? 'Fermer' : 'Ouvrir'} le menu de navigation`}
+        aria-expanded={open}
+        aria-controls="navbar-list"
+        onClick={() => {
+          setOpen(!open);
+        }}
+      >
+        <Icon icon="menu" size="2rem" color="var(--dark-blue)" />
+      </button>
+
+      <ul id="navbar-list" className={styles.navList} ref={navbarListRef}>
         {links.map((link) => (
           <li key={link.title}>
             <NavbarLink
