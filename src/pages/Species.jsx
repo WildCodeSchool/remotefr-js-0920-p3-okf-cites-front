@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import IcomoonReact from 'icomoon-react';
 
@@ -7,6 +7,27 @@ import iconSet from '../assets/selection.json';
 
 export default function Species() {
   const { id } = useParams();
+  const [species, setSpecies] = useState({
+    kingdom: '',
+    phylum: '',
+    class: '',
+    order: '',
+    family: '',
+    genus: '',
+    species: '',
+    subspecies: '',
+    name: '',
+    common_name: '',
+    cites: '',
+    summary: '',
+    image_url: '',
+  });
+
+  useEffect(() => {
+    fetch(`http://localhost:5000/species/${id}`)
+      .then((res) => res.json())
+      .then((species_) => setSpecies(species_));
+  }, [id]);
 
   return (
     <main className={styles.speciesDetails}>
@@ -21,27 +42,28 @@ export default function Species() {
       </div>
       <section className={styles.speciesDetailsContent}>
         <p className={styles.classification}>
-          Animalia &gt; Chordata &gt; Vertebrata &gt; Mammalia &gt; Theria &gt;
-          Eutheria &gt; Proboscidea &gt; Elephantidae &gt; Mammuthus &gt;
-          <span id={styles.lastClassification}> Mammuthus primigenis</span>
+          {species.kingdom} &gt; {species.phylum} &gt; {species.class} &gt;
+          {species.order} &gt; {species.family} &gt; {species.genus} &gt;
+          {species.species} &gt; {species.subspecies}
+          &gt;
+          <span id={styles.lastClassification}>{species.name}</span>
         </p>
         <div className={styles.speciesTitle}>
-          <h1>Mammouth laineux</h1>
-          <p className={styles.citesI}>I Espèce menacée</p>
+          <h1>{species.common_name}</h1>
+          <p className={styles.citesI}>{species.cites}</p>
         </div>
-        <p className={styles.name}>Mammuthus primigenius ({id})</p>
-        <img
-          className={styles.speciesImg}
-          src="https://upload.wikimedia.org/wikipedia/commons/a/ad/Siegsdorfer_Mammut.jpg"
-          alt=""
-        />
+
+        <p className={styles.name}>{species.name}</p>
+        <img className={styles.speciesImg} src={species.image_url} alt="" />
 
         <p className={styles.speciesDescription}>
           Le Mammouth laineux est une espèce éteinte de la famille des
           élèphantidés qui a vécu durant le Pléistocène et, pour ses derniers
           représentants, au cours de l'Holocène il y a seulement 4000 ans.
         </p>
-        <h2 className={styles.citesState}>Statut Cites : Annexe I</h2>
+        <h2 className={styles.citesState}>
+          Statut Cites : Annexe {species.cites}
+        </h2>
         <h3>Menacée d'extinction. Commerce international illégal</h3>
         <p className={styles.speciesDescription}>
           En fonction du pays où le spécimen a été identifié et du type
@@ -56,7 +78,7 @@ export default function Species() {
           contrôlé. Le commerce international des spécimens des espèces
           inscrites à l'Annexe II peut être autorisé. Quand c'est le cas, un
           permis d'exportation ou un certificat de réexploitation est délivré;
-          un permis d'importation n'est pas nécessaire.{' '}
+          un permis d'importation n'est pas nécessaire.
         </p>
       </section>
     </main>
