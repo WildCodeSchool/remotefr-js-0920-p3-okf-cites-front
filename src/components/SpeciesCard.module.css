@@ -1,6 +1,7 @@
 .cardList {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
+  grid-gap: 0.5rem;
 
   list-style: none;
   padding: 0;
@@ -17,6 +18,8 @@
 
 .figure {
   position: relative;
+  margin: 0;
+  padding: 0;
 }
 
 .image {

@@ -114,3 +114,13 @@
     transition: height 0.5s ease;
   }
 }
+
+@media (max-width: 575.98px) {
+  .navbarBrand {
+    padding: 0;
+  }
+
+  .brandLogo {
+    margin-left: 0;
+  }
+}

@@ -5,7 +5,7 @@ import Icon from './Icon';
 
 export default function Searchbar({ value, onChange, onSubmit }) {
   return (
-    <form className={styles.form} onSubmit={onSubmit}>
+    <form onSubmit={onSubmit}>
       {/* Label has associated id, but not possible to put the input element inside due to div */
       /* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
       <label htmlFor="searchbar" className={styles.label}>
@@ -16,7 +16,7 @@ export default function Searchbar({ value, onChange, onSubmit }) {
         <input
           id="searchbar"
           className={styles.searchbar}
-          placeholder="Veuillez entrer le nom d'une plante ou d'un animal"
+          placeholder="Nom d'une plante ou d'un animal"
           value={value}
           onChange={onChange}
         />

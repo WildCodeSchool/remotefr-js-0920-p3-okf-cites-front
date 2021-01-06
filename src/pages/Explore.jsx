@@ -31,11 +31,13 @@ function ExploreHeader({ searchValue, onSearchChange, onSearchSubmit }) {
         </p>
       </div>
 
-      <Searchbar
-        value={searchValue}
-        onChange={onSearchChange}
-        onSubmit={onSearchSubmit}
-      />
+      <div className={styles.searchBar}>
+        <Searchbar
+          value={searchValue}
+          onChange={onSearchChange}
+          onSubmit={onSearchSubmit}
+        />
+      </div>
     </header>
   );
 }
