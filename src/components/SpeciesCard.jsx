@@ -2,20 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import styles from './SpeciesCard.module.css';
-
-const citesText = {
-  I: 'I Espèce menacée',
-  'I/II': 'I/II Espèce menacée',
-  II: 'II Espèce vulnérable',
-  III: 'III Espèce vulnérable',
-};
-
-const citesClass = {
-  I: styles.citesI,
-  'I/II': styles.citesI,
-  II: styles.citesII,
-  III: styles.citesIII,
-};
+import CITES from './CITES';
 
 export function SpeciesCard({
   id,
@@ -38,8 +25,8 @@ export function SpeciesCard({
             <h2 className={styles.vernacular}>{commonName}</h2>
             <span className={styles.scientific}>{name}</span>
 
-            <span className={`${styles.cites} ${citesClass[cites]}`}>
-              {citesText[cites]}
+            <span className={styles.cites}>
+              <CITES cites={cites} />
             </span>
           </figcaption>
         </figure>

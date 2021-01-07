@@ -1,6 +1,7 @@
 .cardList {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(325px, 100%), 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
+  grid-gap: 0.5rem;
 
   list-style: none;
   padding: 0;
@@ -25,10 +26,13 @@
 
 .figure {
   position: relative;
+  margin: 0;
+  padding: 0;
 }
 
 .image {
   object-fit: cover;
+  object-position: top;
   width: 300px;
   height: var(--species-image-height);
   border-radius: 20%;
@@ -42,23 +46,6 @@
   position: absolute;
   top: calc(0.7 * var(--species-image-height)); /* 70% of image's height */
   left: 0px;
-  padding: 0.25rem 0.75rem;
-
-  font-family: 'Raleway', sans-serif;
-  color: white;
-  text-transform: uppercase;
-
-  white-space: nowrap;
-}
-
-.citesI {
-  background-color: var(--danger);
-}
-.citesII {
-  background-color: var(--warning);
-}
-.citesIII {
-  background-color: var(--success);
 }
 
 .vernacular {
