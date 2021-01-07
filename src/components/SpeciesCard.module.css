@@ -38,23 +38,6 @@
   position: absolute;
   top: calc(0.7 * var(--species-image-height)); /* 70% of image's height */
   left: 0px;
-  padding: 0.25rem 0.75rem;
-
-  font-family: 'Raleway', sans-serif;
-  color: white;
-  text-transform: uppercase;
-
-  white-space: nowrap;
-}
-
-.citesI {
-  background-color: var(--danger);
-}
-.citesII {
-  background-color: var(--warning);
-}
-.citesIII {
-  background-color: var(--success);
 }
 
 .vernacular {
