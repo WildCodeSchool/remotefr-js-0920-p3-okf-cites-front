@@ -46,6 +46,12 @@
   position: absolute;
   top: calc(0.7 * var(--species-image-height)); /* 70% of image's height */
   left: 0px;
+
+  transition: opacity 0.25s ease;
+}
+
+.link:hover .cites {
+  opacity: 0;
 }
 
 .vernacular {

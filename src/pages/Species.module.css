@@ -22,7 +22,9 @@
 
 /* Informations relative to species */
 .speciesDetailsContent {
-  margin: 2% 35%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 .classification {
   font-size: 15px;
@@ -35,34 +37,7 @@
 
 .speciesTitle {
   display: flex;
-}
-
-.citesI {
-  background-color: var(--danger);
-  padding: 0.25rem 0.75rem;
-
-  font-size: 13px;
-  font-family: 'Raleway', sans-serif;
-  color: white;
-  text-transform: uppercase;
-}
-.citesII {
-  background-color: var(--warning);
-  padding: 0.25rem 0.75rem;
-
-  font-size: 13px;
-  font-family: 'Raleway', sans-serif;
-  color: white;
-  text-transform: uppercase;
-}
-.citesIII {
-  background-color: var(--success);
-  padding: 0.25rem 0.75rem;
-
-  font-size: 13px;
-  font-family: 'Raleway', sans-serif;
-  color: white;
-  text-transform: uppercase;
+  align-items: center;
 }
 
 /* Common name */

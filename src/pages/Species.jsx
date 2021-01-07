@@ -4,6 +4,7 @@ import IcomoonReact from 'icomoon-react';
 
 import styles from './Species.module.css';
 import iconSet from '../assets/selection.json';
+import CITES from '../components/CITES';
 
 export default function Species() {
   const { id } = useParams();
@@ -40,17 +41,28 @@ export default function Species() {
         />
         <p>Revenir aux résultats de recherche</p>
       </div>
-      <section className={styles.speciesDetailsContent}>
+      <section className={`${styles.speciesDetailsContent} container`}>
         <p className={styles.classification}>
-          {species.kingdom} &gt; {species.phylum} &gt; {species.class} &gt;
-          {species.order} &gt; {species.family} &gt; {species.genus} &gt;
-          {species.species} &gt; {species.subspecies}
-          &gt;
-          <span id={styles.lastClassification}>{species.name}</span>
+          {[
+            species.kingdom,
+            species.phylum,
+            species.class,
+            species.order,
+            species.family,
+            species.genus,
+            species.species,
+            species.subspecies,
+          ]
+            .filter((val) => val != null)
+            .join(' > ')}
+          {/* String ' >' to keep whitespace */}
+          {' >'} <strong id={styles.lastClassification}>{species.name}</strong>
         </p>
         <div className={styles.speciesTitle}>
           <h1>{species.common_name}</h1>
-          <p className={styles.citesI}>{species.cites}</p>
+          <span>
+            <CITES cites={species.cites} />
+          </span>
         </div>
 
         <p className={styles.name}>{species.name}</p>
