@@ -9,6 +9,7 @@
 
 #resultsReturn {
   display: flex;
+  align-items: center;
   margin: 25px 300px;
 
   text-transform: uppercase;
@@ -18,6 +19,15 @@
 
 #arrowLeft2 {
   margin: 18px 8px;
+}
+
+.returnLink {
+  color: inherit;
+  text-decoration: inherit;
+}
+
+.returnLink:hover {
+  text-decoration: underline;
 }
 
 /* Informations relative to species */

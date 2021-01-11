@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from 'react';
+import { useHistory, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Searchbar from '../components/Searchbar';
 import { SpeciesCardList } from '../components/SpeciesCard';
@@ -48,11 +49,19 @@ ExploreHeader.propTypes = {
 };
 
 export default function Explore() {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [filtersSelected, setFiltersSelected] = useState({
-    animal: [],
-    plant: false,
-    cites: [],
+  const history = useHistory();
+  const location = useLocation();
+
+  const [searchQuery, setSearchQuery] = useState(
+    () => new URLSearchParams(location.search).get('query') ?? '',
+  );
+  const [filtersSelected, setFiltersSelected] = useState(() => {
+    const searchParams = new URLSearchParams(location.search);
+    return {
+      animal: searchParams.getAll('animal') ?? [],
+      plant: searchParams.get('plant') === 'true',
+      cites: searchParams.getAll('cites') ?? [],
+    };
   });
 
   const [counts, setCounts] = useState({
@@ -88,6 +97,25 @@ export default function Explore() {
   });
 
   useEffectAfterMount(() => {
+    // Update url search params
+    const searchParams = new URLSearchParams();
+    if (searchQuery.length > 0) {
+      searchParams.append('query', searchQuery);
+    }
+
+    filtersSelected.animal.forEach((val) => {
+      searchParams.append('animal', val);
+    });
+
+    searchParams.append('plant', filtersSelected.plant.toString());
+
+    filtersSelected.cites.forEach((val) => {
+      searchParams.append('cites', val);
+    });
+
+    location.search = searchParams.toString();
+    history.replace(location);
+
     fetchSpeciesDebounced(searchQuery, filtersSelected, setSpecies, setCounts);
   }, [searchQuery, filtersSelected, fetchSpeciesDebounced]);
 
