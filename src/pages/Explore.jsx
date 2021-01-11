@@ -12,6 +12,7 @@ import {
   FilterGroup,
   FilterOption,
 } from '../components/Filters';
+import { Loading } from '../components/Loading';
 
 function ExploreHeader({ searchValue, onSearchChange, onSearchSubmit }) {
   return (
@@ -63,15 +64,22 @@ export default function Explore() {
       cites: searchParams.getAll('cites') ?? [],
     };
   });
+  const [loading, setLoading] = useState(false);
 
   const [counts, setCounts] = useState({
     total: '?',
   });
-  const [species, setSpecies] = useState(null);
+  const [species, setSpecies] = useState([]);
 
   // Pass state by argument to avoid stale references while keeping the same function reference to debounce
   const fetchSpecies = useCallback(
-    async (searchQuery_, filtersSelected_, setSpecies_, setCounts_) => {
+    async (
+      searchQuery_,
+      filtersSelected_,
+      setLoading_,
+      setSpecies_,
+      setCounts_,
+    ) => {
       const url = new URL(`http://localhost:5000/species/search`);
       url.searchParams.append('query', searchQuery_);
       url.searchParams.append('plant', filtersSelected_.plant);
@@ -82,18 +90,30 @@ export default function Explore() {
         url.searchParams.append('cites[]', c),
       );
 
-      const res = await fetch(url);
-      const { species: newSpecies, counts: counts_ } = await res.json();
+      setLoading_(true);
 
-      setSpecies_(newSpecies);
-      setCounts_(counts_);
+      try {
+        const res = await fetch(url);
+        const { species: newSpecies, counts: counts_ } = await res.json();
+
+        setSpecies_(newSpecies);
+        setCounts_(counts_);
+      } finally {
+        setLoading_(false);
+      }
     },
     [],
   );
   const fetchSpeciesDebounced = useCallback(debounce(fetchSpecies, 1000), []);
 
   useMount(() => {
-    fetchSpecies(searchQuery, filtersSelected, setSpecies, setCounts);
+    fetchSpecies(
+      searchQuery,
+      filtersSelected,
+      setLoading,
+      setSpecies,
+      setCounts,
+    );
   });
 
   useEffectAfterMount(() => {
@@ -116,7 +136,13 @@ export default function Explore() {
     location.search = searchParams.toString();
     history.replace(location);
 
-    fetchSpeciesDebounced(searchQuery, filtersSelected, setSpecies, setCounts);
+    fetchSpeciesDebounced(
+      searchQuery,
+      filtersSelected,
+      setLoading,
+      setSpecies,
+      setCounts,
+    );
   }, [searchQuery, filtersSelected, fetchSpeciesDebounced]);
 
   return (
@@ -253,7 +279,13 @@ export default function Explore() {
             </FilterGroup>
           </aside>
           <main className={styles.main}>
-            {species ? <SpeciesCardList species={species} /> : ''}
+            <Loading loading={loading}>
+              {species.length > 0 ? (
+                <SpeciesCardList species={species} />
+              ) : (
+                <p>Aucune expèce trouvée</p>
+              )}
+            </Loading>
           </main>
         </div>
       </section>
