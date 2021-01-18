@@ -281,7 +281,12 @@ export default function Explore() {
           <main className={styles.main}>
             <Loading loading={loading}>
               {species.length > 0 ? (
-                <SpeciesCardList species={species} />
+                <SpeciesCardList
+                  species={species}
+                  linkState={{
+                    prevSearchPath: location.pathname + location.search,
+                  }}
+                />
               ) : (
                 <p>Aucune expèce trouvée</p>
               )}
