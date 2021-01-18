@@ -65,7 +65,8 @@
 }
 
 .speciesImg {
-  max-width: 700px;
+  max-width: 70%;
+  max-height: 600px;
   border-radius: 40px;
 }
 
@@ -80,4 +81,35 @@
 .citesState {
   text-transform: uppercase;
   font-size: 18px;
+}
+
+@media (max-width: 991.98px) {
+  #resultsReturn {
+    margin: 25px 10px;
+    font-size: 16px;
+  }
+
+  #arrowLeft2 {
+    margin: 10px;
+  }
+
+  .speciesImg {
+    max-width: 80%;
+    max-height: 400px;
+  }
+
+  .classification {
+    font-size: 12px;
+    text-align: center;
+  }
+
+  .speciesTitle {
+    flex-direction: column;
+  }
+
+  .speciesTitle h1 {
+    margin: 20px;
+    font-size: 40px;
+    text-align: center;
+  }
 }

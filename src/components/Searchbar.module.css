@@ -37,7 +37,7 @@
 .searchButton {
   background: linear-gradient(
     149deg,
-    rgba(27, 89, 247, 1) 0%,
+    rgb(67, 120, 255) 0%,
     rgba(7, 22, 62, 1) 100%
   );
   border: transparent;
