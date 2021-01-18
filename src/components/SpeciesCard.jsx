@@ -11,9 +11,13 @@ export function SpeciesCard({
   cites,
   summary,
   imageUrl,
+  linkState,
 }) {
   return (
-    <Link to={`/espece/${id}`} className={styles.link}>
+    <Link
+      to={{ pathname: `/espece/${id}`, state: linkState }}
+      className={styles.link}
+    >
       <article className={styles.card}>
         <figure className={styles.figure}>
           <img
@@ -40,6 +44,7 @@ SpeciesCard.defaultProps = {
   commonName: '',
   summary: '',
   imageUrl: '/placeholder.svg',
+  linkState: undefined,
 };
 SpeciesCard.propTypes = {
   id: PropTypes.number.isRequired,
@@ -48,9 +53,10 @@ SpeciesCard.propTypes = {
   cites: PropTypes.oneOf(['I', 'I/II', 'II', 'III']).isRequired,
   summary: PropTypes.string,
   imageUrl: PropTypes.string,
+  linkState: PropTypes.objectOf(PropTypes.string),
 };
 
-export function SpeciesCardList({ species }) {
+export function SpeciesCardList({ species, linkState }) {
   return (
     <ul className={styles.cardList}>
       {species.map((singleSpecies) => (
@@ -62,12 +68,16 @@ export function SpeciesCardList({ species }) {
             cites={singleSpecies.cites}
             summary={singleSpecies.summary}
             imageUrl={singleSpecies.image_url ?? singleSpecies.imageUrl}
+            linkState={linkState}
           />
         </li>
       ))}
     </ul>
   );
 }
+SpeciesCardList.defaultProps = {
+  linkState: undefined,
+};
 SpeciesCardList.propTypes = {
   species: PropTypes.arrayOf(
     PropTypes.shape({
@@ -79,4 +89,5 @@ SpeciesCardList.propTypes = {
       summary: PropTypes.string,
     }),
   ).isRequired,
+  linkState: PropTypes.objectOf(PropTypes.string),
 };

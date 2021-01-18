@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
 import IcomoonReact from 'icomoon-react';
 
 import styles from './Species.module.css';
@@ -8,7 +8,7 @@ import CITES from '../components/CITES';
 import { Loading } from '../components/Loading';
 
 export default function Species() {
-  const history = useHistory();
+  const location = useLocation();
 
   const { id } = useParams();
   const [species, setSpecies] = useState({
@@ -46,16 +46,12 @@ export default function Species() {
           size={20}
           icon="arrow-left2"
         />
-        <a
+        <Link
           className={styles.returnLink}
-          href="/"
-          onClick={(e) => {
-            e.preventDefault();
-            history.goBack();
-          }}
+          to={location.state?.prevSearchPath ?? '/'}
         >
           Revenir aux résultats de recherche
-        </a>
+        </Link>
       </div>
 
       <section className={`${styles.speciesDetailsContent} container`}>
