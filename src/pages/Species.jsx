@@ -7,6 +7,25 @@ import iconSet from '../assets/selection.json';
 import CITES from '../components/CITES';
 import { Loading } from '../components/Loading';
 
+function CountryList({ label, countries }) {
+  if (countries == null) return '';
+
+  return (
+    <div>
+      {label}
+      <ul>
+        {countries.map((country, i) => (
+          <li key={country.iso_code}>
+            <abbr title={country.iso_code}>{country.name}</abbr>
+            {country.uncertain && '?'}
+            {i !== countries.length - 1 && ', '}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
 export default function Species() {
   const location = useLocation();
 
@@ -25,6 +44,7 @@ export default function Species() {
     cites: '',
     summary: '',
     image_url: '',
+    countries: {},
   });
   const [loading, setLoading] = useState(true);
 
@@ -105,6 +125,29 @@ export default function Species() {
             cas, un permis d'exportation ou un certificat de réexploitation est
             délivré; un permis d'importation n'est pas nécessaire.
           </p>
+
+          <div>
+            <CountryList
+              label="Natif à :"
+              countries={species.countries.native}
+            />
+            <CountryList
+              label="Introduit :"
+              countries={species.countries.introduced}
+            />
+            <CountryList
+              label="Réintroduit à :"
+              countries={species.countries.reintroduced}
+            />
+            <CountryList
+              label="Eteint à :"
+              countries={species.countries.extinct}
+            />
+            <CountryList
+              label="Incertain à :"
+              countries={species.countries.uncertain}
+            />
+          </div>
         </Loading>
       </section>
     </main>
