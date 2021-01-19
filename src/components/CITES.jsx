@@ -7,13 +7,15 @@ const citesText = {
   'I/II': 'I/II Espèce menacée',
   II: 'II Espèce vulnérable',
   III: 'III Espèce vulnérable',
+  '?': '? Annexe inconnu',
 };
 
 const citesClass = {
   I: styles.citesI,
-  'I/II': styles.citesI,
+  'I/II': styles['citesI/II'],
   II: styles.citesII,
   III: styles.citesIII,
+  '?': styles['cites?'],
 };
 
 export default function CITES({ cites }) {
@@ -24,5 +26,5 @@ export default function CITES({ cites }) {
   );
 }
 CITES.propTypes = {
-  cites: PropTypes.oneOf(['I', 'I/II', 'II', 'III']).isRequired,
+  cites: PropTypes.oneOf(['I', 'I/II', 'II', 'III', '?']).isRequired,
 };

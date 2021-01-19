@@ -59,7 +59,7 @@ export default function Explore() {
   const [filtersSelected, setFiltersSelected] = useState(() => {
     const searchParams = new URLSearchParams(location.search);
     return {
-      animal: searchParams.getAll('animal') ?? [],
+      class: searchParams.getAll('class') ?? [],
       plant: searchParams.get('plant') === 'true',
       cites: searchParams.getAll('cites') ?? [],
     };
@@ -80,15 +80,24 @@ export default function Explore() {
       setSpecies_,
       setCounts_,
     ) => {
-      const url = new URL(`http://localhost:5000/species/search`);
+      const url = new URL(`http://localhost:5000/api/species/search`);
       url.searchParams.append('query', searchQuery_);
-      url.searchParams.append('plant', filtersSelected_.plant);
-      filtersSelected_.animal.forEach((animalClass) =>
-        url.searchParams.append('animal[]', animalClass),
+
+      if (filtersSelected_.plant) {
+        url.searchParams.append('kingdom[]', 'Plantae');
+      }
+      if (filtersSelected_.class.length > 0) {
+        url.searchParams.append('kingdom[]', 'Animalia');
+      }
+
+      filtersSelected_.class.forEach((animalClass) =>
+        url.searchParams.append('class[]', animalClass),
       );
-      filtersSelected_.cites.forEach((c) =>
-        url.searchParams.append('cites[]', c),
-      );
+
+      // Add I/II if I or II is selected
+      const cites = [...filtersSelected_.cites];
+      if (cites.includes('I') || cites.includes('II')) cites.push('I/II');
+      cites.forEach((c) => url.searchParams.append('cites[]', c));
 
       setLoading_(true);
 
@@ -123,8 +132,8 @@ export default function Explore() {
       searchParams.append('query', searchQuery);
     }
 
-    filtersSelected.animal.forEach((val) => {
-      searchParams.append('animal', val);
+    filtersSelected.class.forEach((val) => {
+      searchParams.append('class', val);
     });
 
     searchParams.append('plant', filtersSelected.plant.toString());
@@ -169,7 +178,7 @@ export default function Explore() {
               onSelect={setFiltersSelected}
             >
               <Filter
-                name="animal"
+                name="class"
                 label="Faune"
                 count={counts.kingdom?.animalia}
               >
@@ -263,17 +272,28 @@ export default function Explore() {
                 <FilterOption
                   value="I"
                   label="Espèces menacées (Annexe I)"
-                  count={counts.cites?.I}
+                  count={
+                    counts.cites &&
+                    (counts.cites.I ?? 0) + (counts.cites['I/II'] ?? 0)
+                  }
                 />
                 <FilterOption
                   value="II"
                   label="Espèces vulnérables (Annexe II)"
-                  count={counts.cites?.II}
+                  count={
+                    counts.cites &&
+                    (counts.cites.II ?? 0) + (counts.cites['I/II'] ?? 0)
+                  }
                 />
                 <FilterOption
                   value="III"
                   label="Espèces vulnérables (Annexe III)"
                   count={counts.cites?.III}
+                />
+                <FilterOption
+                  value="?"
+                  label="Annexe inconnu (Annexe ?)"
+                  count={counts.cites?.['?']}
                 />
               </Filter>
             </FilterGroup>

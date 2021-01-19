@@ -50,7 +50,7 @@ SpeciesCard.propTypes = {
   id: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
   commonName: PropTypes.string,
-  cites: PropTypes.oneOf(['I', 'I/II', 'II', 'III']).isRequired,
+  cites: PropTypes.oneOf(['I', 'I/II', 'II', 'III', '?']).isRequired,
   summary: PropTypes.string,
   imageUrl: PropTypes.string,
   linkState: PropTypes.objectOf(PropTypes.string),

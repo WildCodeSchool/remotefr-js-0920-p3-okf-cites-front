@@ -31,7 +31,7 @@ export default function Species() {
   useEffect(() => {
     setLoading(true);
 
-    fetch(`http://localhost:5000/species/${id}`)
+    fetch(`http://localhost:5000/api/species/${id}`)
       .then((res) => res.json())
       .then((species_) => setSpecies(species_))
       .finally(() => setLoading(false));
