@@ -60,6 +60,9 @@
 
 .main {
   flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-content: center;
 }
 
 @media (max-width: 991.98px) {

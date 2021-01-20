@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from 'react';
+import { useHistory, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Searchbar from '../components/Searchbar';
 import { SpeciesCardList } from '../components/SpeciesCard';
@@ -11,6 +12,7 @@ import {
   FilterGroup,
   FilterOption,
 } from '../components/Filters';
+import { Loading } from '../components/Loading';
 
 function ExploreHeader({ searchValue, onSearchChange, onSearchSubmit }) {
   return (
@@ -48,47 +50,108 @@ ExploreHeader.propTypes = {
 };
 
 export default function Explore() {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [filtersSelected, setFiltersSelected] = useState({
-    animal: [],
-    plant: false,
-    cites: [],
+  const history = useHistory();
+  const location = useLocation();
+
+  const [searchQuery, setSearchQuery] = useState(
+    () => new URLSearchParams(location.search).get('query') ?? '',
+  );
+  const [filtersSelected, setFiltersSelected] = useState(() => {
+    const searchParams = new URLSearchParams(location.search);
+    return {
+      class: searchParams.getAll('class') ?? [],
+      plant: searchParams.get('plant') === 'true',
+      cites: searchParams.getAll('cites') ?? [],
+    };
   });
+  const [loading, setLoading] = useState(false);
 
   const [counts, setCounts] = useState({
     total: '?',
   });
-  const [species, setSpecies] = useState(null);
+  const [species, setSpecies] = useState([]);
 
   // Pass state by argument to avoid stale references while keeping the same function reference to debounce
   const fetchSpecies = useCallback(
-    async (searchQuery_, filtersSelected_, setSpecies_, setCounts_) => {
-      const url = new URL(`http://localhost:5000/species/search`);
+    async (
+      searchQuery_,
+      filtersSelected_,
+      setLoading_,
+      setSpecies_,
+      setCounts_,
+    ) => {
+      const url = new URL(`http://localhost:5000/api/species/search`);
       url.searchParams.append('query', searchQuery_);
-      url.searchParams.append('plant', filtersSelected_.plant);
-      filtersSelected_.animal.forEach((animalClass) =>
-        url.searchParams.append('animal[]', animalClass),
-      );
-      filtersSelected_.cites.forEach((c) =>
-        url.searchParams.append('cites[]', c),
+
+      if (filtersSelected_.plant) {
+        url.searchParams.append('kingdom[]', 'Plantae');
+      }
+      if (filtersSelected_.class.length > 0) {
+        url.searchParams.append('kingdom[]', 'Animalia');
+      }
+
+      filtersSelected_.class.forEach((animalClass) =>
+        url.searchParams.append('class[]', animalClass),
       );
 
-      const res = await fetch(url);
-      const { species: newSpecies, counts: counts_ } = await res.json();
+      // Add I/II if I or II is selected
+      const cites = [...filtersSelected_.cites];
+      if (cites.includes('I') || cites.includes('II')) cites.push('I/II');
+      cites.forEach((c) => url.searchParams.append('cites[]', c));
 
-      setSpecies_(newSpecies);
-      setCounts_(counts_);
+      setLoading_(true);
+
+      try {
+        const res = await fetch(url);
+        const { species: newSpecies, counts: counts_ } = await res.json();
+
+        setSpecies_(newSpecies);
+        setCounts_(counts_);
+      } finally {
+        setLoading_(false);
+      }
     },
     [],
   );
   const fetchSpeciesDebounced = useCallback(debounce(fetchSpecies, 1000), []);
 
   useMount(() => {
-    fetchSpecies(searchQuery, filtersSelected, setSpecies, setCounts);
+    fetchSpecies(
+      searchQuery,
+      filtersSelected,
+      setLoading,
+      setSpecies,
+      setCounts,
+    );
   });
 
   useEffectAfterMount(() => {
-    fetchSpeciesDebounced(searchQuery, filtersSelected, setSpecies, setCounts);
+    // Update url search params
+    const searchParams = new URLSearchParams();
+    if (searchQuery.length > 0) {
+      searchParams.append('query', searchQuery);
+    }
+
+    filtersSelected.class.forEach((val) => {
+      searchParams.append('class', val);
+    });
+
+    searchParams.append('plant', filtersSelected.plant.toString());
+
+    filtersSelected.cites.forEach((val) => {
+      searchParams.append('cites', val);
+    });
+
+    location.search = searchParams.toString();
+    history.replace(location);
+
+    fetchSpeciesDebounced(
+      searchQuery,
+      filtersSelected,
+      setLoading,
+      setSpecies,
+      setCounts,
+    );
   }, [searchQuery, filtersSelected, fetchSpeciesDebounced]);
 
   return (
@@ -115,7 +178,7 @@ export default function Explore() {
               onSelect={setFiltersSelected}
             >
               <Filter
-                name="animal"
+                name="class"
                 label="Faune"
                 count={counts.kingdom?.animalia}
               >
@@ -209,23 +272,45 @@ export default function Explore() {
                 <FilterOption
                   value="I"
                   label="Espèces menacées (Annexe I)"
-                  count={counts.cites?.I}
+                  count={
+                    counts.cites &&
+                    (counts.cites.I ?? 0) + (counts.cites['I/II'] ?? 0)
+                  }
                 />
                 <FilterOption
                   value="II"
                   label="Espèces vulnérables (Annexe II)"
-                  count={counts.cites?.II}
+                  count={
+                    counts.cites &&
+                    (counts.cites.II ?? 0) + (counts.cites['I/II'] ?? 0)
+                  }
                 />
                 <FilterOption
                   value="III"
                   label="Espèces vulnérables (Annexe III)"
                   count={counts.cites?.III}
                 />
+                <FilterOption
+                  value="?"
+                  label="Annexe inconnu (Annexe ?)"
+                  count={counts.cites?.['?']}
+                />
               </Filter>
             </FilterGroup>
           </aside>
           <main className={styles.main}>
-            {species ? <SpeciesCardList species={species} /> : ''}
+            <Loading loading={loading}>
+              {species.length > 0 ? (
+                <SpeciesCardList
+                  species={species}
+                  linkState={{
+                    prevSearchPath: location.pathname + location.search,
+                  }}
+                />
+              ) : (
+                <p>Aucune expèce trouvée</p>
+              )}
+            </Loading>
           </main>
         </div>
       </section>

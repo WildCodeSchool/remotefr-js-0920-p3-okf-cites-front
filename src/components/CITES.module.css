@@ -11,9 +11,15 @@
 .citesI {
   background-color: var(--danger);
 }
+.citesI\/II {
+  background: linear-gradient(to right, var(--danger), var(--warning));
+}
 .citesII {
   background-color: var(--warning);
 }
 .citesIII {
   background-color: var(--success);
+}
+.cites\? {
+  background-color: var(--gray-blue);
 }
