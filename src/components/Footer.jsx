@@ -38,7 +38,7 @@ export default function Footer() {
         <li>
           <a
             className={styles.link}
-            href="http://localhost:5000/api/dump"
+            href={`${process.env.REACT_APP_API_URL}/api/dump`}
             target="_blank"
             rel="noreferrer noopener"
           >
