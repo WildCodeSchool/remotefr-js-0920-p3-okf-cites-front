@@ -26,6 +26,23 @@ function CountryList({ label, countries }) {
   );
 }
 
+const citesDescription = {
+  I:
+    'Espèce menacée d`extinction. Le commerce international de leurs spécimens est illégal.',
+  'I/II':
+    'Espèce menacée d`extinction. Le commerce international de leurs spécimens est illégal.',
+  II:
+    'Espèce pouvant être menacée d`extinction si le commerce de leurs spécimens n`est pas étroitement contrôlé. Le commerce international de leurs spécimens peut être autorisé lorsqu`un permis d`exportation ou de réexportation est délivré.',
+  III:
+    'Espèce vulnérable. Le commerce international de leurs spécimens n`est autorisé que sur présentation des permis ou certificats appropriés.',
+};
+
+function CitesDescription({ cites }) {
+  return (
+    <div className={styles.citesDescription}>{citesDescription[cites]}</div>
+  );
+}
+
 export default function Species() {
   const location = useLocation();
 
@@ -101,50 +118,40 @@ export default function Species() {
           </div>
           <p className={styles.name}>{species.name}</p>
           <img className={styles.speciesImg} src={species.image_url} alt="" />
-          <p className={styles.speciesDescription}>
-            Le Mammouth laineux est une espèce éteinte de la famille des
-            élèphantidés qui a vécu durant le Pléistocène et, pour ses derniers
-            représentants, au cours de l'Holocène il y a seulement 4000 ans.
-          </p>
           <h2 className={styles.citesState}>
             Statut Cites : Annexe {species.cites}
           </h2>
-          <h3>Menacée d'extinction. Commerce international illégal</h3>
+          <h3>
+            <CitesDescription cites={species.cites} />
+          </h3>
           <p className={styles.speciesDescription}>
             En fonction du pays où le spécimen a été identifié et du type
             d'infraction, les sanctions peuvent aller d'une amende à plusieurs
             années de prison, ainsi que la confiscation du spécimen ou de
             l'objet issu du spécimen.
           </p>
-          <p className={styles.speciesDescription}>
-            Les espèces inscrites à l'annexe II sont celles qui, bien que
-            n'étant pas nécessairement menacées actuellement d'extinction,
-            pourraient le devenir si le commerce de leurs spécimens n'était pas
-            étroitement contrôlé. Le commerce international des spécimens des
-            espèces inscrites à l'Annexe II peut être autorisé. Quand c'est le
-            cas, un permis d'exportation ou un certificat de réexploitation est
-            délivré; un permis d'importation n'est pas nécessaire.
-          </p>
+          {/* <p className={styles.speciesDescription}>Lien vers la page Wiki data à ajouter
+          </p> */}
 
-          <div>
+          <div className={styles.countryList}>
             <CountryList
-              label="Natif à :"
+              label="Espèce native :"
               countries={species.countries.native}
             />
             <CountryList
-              label="Introduit :"
+              label="Espèce introduite :"
               countries={species.countries.introduced}
             />
             <CountryList
-              label="Réintroduit à :"
+              label="Espèce réintroduite :"
               countries={species.countries.reintroduced}
             />
             <CountryList
-              label="Eteint à :"
+              label="Espèce éteinte :"
               countries={species.countries.extinct}
             />
             <CountryList
-              label="Incertain à :"
+              label="Statut incertain :"
               countries={species.countries.uncertain}
             />
           </div>
