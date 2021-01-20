@@ -1,0 +1,84 @@
+.header {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin: 7rem auto;
+  max-width: 90%;
+}
+
+.headerTitle {
+  font-size: 45px;
+  margin: 0;
+}
+
+.headerText {
+  font-size: 23px;
+}
+
+.headerImageTitleWrapper {
+  display: flex;
+}
+
+.headerIntroduction {
+  max-width: 700px;
+  flex-direction: column;
+}
+
+.elephantLogo {
+  height: 55px;
+  width: 55px;
+  margin-right: 10px;
+}
+
+.searchBar {
+  flex-basis: 30%;
+}
+
+.background {
+  background-color: var(--light-gray);
+}
+
+.content {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  padding: 0.5rem 0;
+
+  max-width: 90%;
+  margin: auto;
+}
+
+.filterBox {
+  margin-right: 5%;
+  flex-shrink: 0;
+}
+
+.filterBoxCount {
+  color: var(--dark-blue);
+}
+
+.main {
+  flex-grow: 1;
+}
+
+@media (max-width: 991.98px) {
+  .header {
+    flex-direction: column;
+    justify-content: center;
+
+    margin: 3rem auto;
+  }
+
+  .headerImageTitleWrapper {
+    justify-content: center;
+  }
+
+  .headerText {
+    text-align: center;
+  }
+
+  .searchBar {
+    width: 100%;
+  }
+}

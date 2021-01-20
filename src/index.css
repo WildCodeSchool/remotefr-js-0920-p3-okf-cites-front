@@ -1,3 +1,93 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&family=Raleway:wght@500;800&family=Rye&display=swap');
+/* 
+https://fonts.google.com/?sidebar.open=true&family=Raleway:wght@500;800&family=Rye&display=swap&selection.family=Playfair+Display:wght@500|Raleway:wght@500;800|Rye
+
+font-family: 'Raleway', sans-serif;
+font-family: 'Playfair Display', serif;
+font-family: 'Rye', cursive;
+*/
+
+/* For copy-pasting (Bootstrap breakpoints)
+
+Extra small devices (portrait phones, less than 576px)
+@media (max-width: 575.98px) { ... }
+
+Small devices (landscape phones, less than 768px)
+@media (max-width: 767.98px) { ... }
+
+Medium devices (tablets, less than 992px)
+@media (max-width: 991.98px) { ... }
+
+Large devices (desktops, less than 1200px)
+@media (max-width: 1199.98px) { ... }
+
+Extra large devices (large desktops)
+No media query since the extra-large breakpoint has no upper bound on its width
+*/
+
+:root {
+  --primary: #33375f;
+  --success: #1a771f;
+  --info: #1b59f7;
+  --warning: #c17803;
+  --danger: #891758;
+
+  --light-gray: #f4f5fa;
+
+  --light-blue: #e9ebfb;
+  --gray-blue: #6e718c;
+  --dark-blue: #33385d;
+}
+
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
+  font-family: 'Playfair Display', serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Raleway', sans-serif;
+}
+
+/* Bootstrap container */
+.container {
+  width: 100%;
+  padding-right: 0.75rem;
+  padding-left: 0.75rem;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+@media (min-width: 576px) {
+  .container {
+    max-width: 540px;
+  }
+}
+@media (min-width: 768px) {
+  .container {
+    max-width: 720px;
+  }
+}
+@media (min-width: 992px) {
+  .container {
+    max-width: 960px;
+  }
+}
+@media (min-width: 1200px) {
+  .container {
+    max-width: 1140px;
+  }
+}
+@media (min-width: 1400px) {
+  .container {
+    max-width: 1320px;
+  }
 }

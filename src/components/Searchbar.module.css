@@ -1,0 +1,61 @@
+.label {
+  font-family: 'Raleway', sans-serif;
+  font-weight: 700;
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  color: var(--dark-blue);
+
+  display: block; /* For ::first-letter to work */
+}
+.label::first-letter {
+  font-size: 1.5rem;
+}
+
+.inputButtonWrapper {
+  --input-button-wrapper-radius: 50px;
+  --input-button-wrapper-border-size: 1px;
+  --input-button-wrapper-height: 2rem;
+
+  height: var(--input-button-wrapper-height);
+  border: var(--input-button-wrapper-border-size) solid black;
+  border-radius: var(--input-button-wrapper-radius);
+
+  display: flex;
+}
+
+.searchbar {
+  border: none;
+  width: 100%;
+  font-size: 1.2rem;
+  margin-left: 1rem;
+}
+
+.searchbar:focus {
+  outline: none;
+}
+
+.searchButton {
+  background: linear-gradient(
+    149deg,
+    rgba(27, 89, 247, 1) 0%,
+    rgba(7, 22, 62, 1) 100%
+  );
+  border: transparent;
+  border-radius: var(--input-button-wrapper-radius);
+  cursor: pointer;
+  padding: 0;
+
+  height: var(--input-button-wrapper-height);
+  width: var(--input-button-wrapper-height);
+
+  margin-left: auto;
+  flex-shrink: 0;
+
+  position: relative;
+  left: var(--input-button-wrapper-border-size);
+  bottom: var(--input-button-wrapper-border-size);
+}
+
+.searchButton:focus {
+  outline: none;
+}
