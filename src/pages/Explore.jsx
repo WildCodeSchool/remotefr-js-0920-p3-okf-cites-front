@@ -80,7 +80,7 @@ export default function Explore() {
       setSpecies_,
       setCounts_,
     ) => {
-      const url = new URL(`http://localhost:5000/api/species/search`);
+      const url = new URL('/api/species/search', process.env.REACT_APP_API_URL);
       url.searchParams.append('query', searchQuery_);
 
       if (filtersSelected_.plant) {
