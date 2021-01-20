@@ -1,0 +1,31 @@
+.footer {
+  background-color: var(--gray-blue);
+  color: white;
+  padding: 0.5rem;
+
+  flex-shrink: 0; /* For sticky footer */
+}
+
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.list li {
+  display: contents;
+}
+
+.link {
+  color: inherit;
+  text-decoration: inherit;
+  padding: 0.5rem;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
