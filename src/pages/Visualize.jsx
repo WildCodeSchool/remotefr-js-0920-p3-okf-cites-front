@@ -1,5 +1,6 @@
 import React from 'react';
+import Data from '../components/Data';
 
 export default function Visualize() {
-  return <h1>Visualize Page</h1>;
+  return <Data />;
 }
