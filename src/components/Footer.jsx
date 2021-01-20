@@ -35,6 +35,16 @@ export default function Footer() {
             API
           </a>
         </li>
+        <li>
+          <a
+            className={styles.link}
+            href="http://localhost:5000/api/dump"
+            target="_blank"
+            rel="noreferrer noopener"
+          >
+            Télécharger un dump de la base de données
+          </a>
+        </li>
       </ul>
     </footer>
   );
