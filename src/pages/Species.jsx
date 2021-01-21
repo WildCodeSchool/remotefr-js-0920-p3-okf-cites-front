@@ -62,6 +62,7 @@ export default function Species() {
     summary: '',
     image_url: '',
     countries: {},
+    wikidata_id: '',
   });
   const [loading, setLoading] = useState(true);
 
@@ -130,8 +131,14 @@ export default function Species() {
             années de prison, ainsi que la confiscation du spécimen ou de
             l'objet issu du spécimen.
           </p>
-          {/* <p className={styles.speciesDescription}>Lien vers la page Wiki data à ajouter
-          </p> */}
+          <p className={styles.speciesDescription}>
+            Cette page manque d'informations, pour contribuer, rendez-vous sur
+            cette page :
+            <a href={`https://www.wikidata.org/wiki/${species.wikidata_id}`}>
+              {' '}
+              Lien vers la page Wikidata
+            </a>
+          </p>
 
           <div className={styles.countryList}>
             <CountryList
