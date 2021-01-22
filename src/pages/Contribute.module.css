@@ -1,0 +1,37 @@
+.link {
+  color: inherit;
+  text-decoration: inherit;
+}
+.link:hover {
+  text-decoration: underline;
+}
+
+.content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  --species-card-width: min(450px, 90vw);
+}
+
+.table {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  max-width: 90vw;
+  overflow-x: auto;
+}
+
+.table th {
+  white-space: nowrap;
+}
+
+.table a {
+  display: block;
+  width: 200px;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
