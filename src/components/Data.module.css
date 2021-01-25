@@ -9,4 +9,11 @@
 
 .titre{
   text-align: center;
+  font-size: 1em;
+}
+
+.data{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
 }
