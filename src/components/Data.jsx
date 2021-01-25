@@ -11,6 +11,7 @@ export default function Data() {
     kingdomDataCommon: '',
     kingdomDataImage: '',
     kingdomDataTotal: '',
+    kingdomDataArticle: '',
   });
 
   // const innerRadius = number('Inner Radius', 0.1);
@@ -63,7 +64,7 @@ export default function Data() {
       ) : (
         <div>
           <h2 className={styles.titre}>
-            Informations manquantes parmis les animaux
+            Informations manquantes parmi les animaux
           </h2>
           <RadialAreaChart
             height={450}
@@ -76,6 +77,7 @@ export default function Data() {
               { key: 'CITES', data: datavis.kingdomDataCites[0].count },
               { key: 'Photo', data: datavis.kingdomDataImage[0].count },
               { key: 'Nom commun', data: datavis.kingdomDataCommon[0].count },
+              { key: 'Description', data: datavis.kingdomDataArticle[0].count },
             ]}
             innerRadius={innerRadius}
             axis={<RadialAxis type="category" />}
@@ -112,7 +114,7 @@ export default function Data() {
       ) : (
         <div>
           <h2 className={styles.titre}>
-            Informations manquantes parmis les plantes
+            Informations manquantes parmi les plantes
           </h2>
           <RadialAreaChart
             height={450}
@@ -128,6 +130,7 @@ export default function Data() {
                 key: 'Nom commun',
                 data: datavis.kingdomDataCommon[1].count,
               },
+              { key: 'Description', data: datavis.kingdomDataArticle[0].count },
             ]}
             innerRadius={innerRadius}
             axis={<RadialAxis type="category" />}
