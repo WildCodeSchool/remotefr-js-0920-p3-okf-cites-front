@@ -38,11 +38,13 @@
   color: inherit;
   text-decoration: inherit;
   padding: 0.5rem;
+  font-weight: 700;
 }
 
 .thanksLink {
   color: inherit;
   text-decoration: inherit;
+  font-weight: 700;
 }
 
 .thanksLink:hover {
