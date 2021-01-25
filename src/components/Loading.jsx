@@ -31,16 +31,57 @@ Spinner.propTypes = {
   size: PropTypes.oneOf(['sm', '1x', '2x', '3x']),
 };
 
-export function Loading({ loading, className, style, size, children }) {
-  return loading ? (
-    <Spinner className={className} style={style} size={size} />
-  ) : (
-    children
-  );
+export const LoadingState = {
+  Loading: 0,
+  NotLoading: 1,
+  Error: 2,
+};
+
+export function Loading({
+  state,
+  loading,
+  error,
+  onTryAgain,
+  className,
+  style,
+  size,
+  children,
+}) {
+  if (state === LoadingState.Loading || loading) {
+    return <Spinner className={className} style={style} size={size} />;
+  }
+
+  if (state === LoadingState.Error || error) {
+    return (
+      <div className={styles.loadingError} role="alert">
+        Erreur de chargement
+        {onTryAgain != null && (
+          <button
+            type="button"
+            onClick={onTryAgain}
+            title="Relancer la requête"
+          >
+            Réessayer ?
+          </button>
+        )}
+      </div>
+    );
+  }
+
+  return children;
 }
-Loading.defaultProps = Spinner.defaultProps;
+Loading.defaultProps = {
+  ...Spinner.defaultProps,
+  state: null,
+  loading: false,
+  error: false,
+  onTryAgain: null,
+};
 Loading.propTypes = {
   ...Spinner.propTypes,
-  loading: PropTypes.bool.isRequired,
+  state: PropTypes.oneOf(Object.values(LoadingState)),
+  loading: PropTypes.bool,
+  error: PropTypes.bool,
+  onTryAgain: PropTypes.func,
   children: PropTypes.node.isRequired,
 };
