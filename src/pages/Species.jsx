@@ -131,9 +131,9 @@ export default function Species() {
             années de prison, ainsi que la confiscation du spécimen ou de
             l'objet issu du spécimen.
           </p>
-          <p className={styles.speciesDescription}>
-            Cette page manque d'informations, pour contribuer, rendez-vous sur
-            cette page :
+          <p className={styles.contribute}>
+            Cette page manque d&apos;informations. <br /> Vous souhaitez
+            contribuer ? Vous pouvez vous rendre sur cette page :
             <a href={`https://www.wikidata.org/wiki/${species.wikidata_id}`}>
               {' '}
               Lien vers la page Wikidata
