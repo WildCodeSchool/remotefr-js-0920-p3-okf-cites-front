@@ -1,9 +1,23 @@
 .footer {
   background-color: var(--gray-blue);
-  color: white;
-  padding: 0.5rem;
+  color: var(--light-blue);
+  padding: 1.5rem;
 
   flex-shrink: 0; /* For sticky footer */
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  letter-spacing: 0.1px;
+}
+
+.footerLogoImg {
+  max-width: 100px;
+  vertical-align: middle;
+  margin: 5px 15px;
+}
+
+.mobileLogo {
+  display: none;
 }
 
 .list {
@@ -26,6 +40,31 @@
   padding: 0.5rem;
 }
 
+.thanksLink {
+  color: inherit;
+  text-decoration: inherit;
+}
+
+.thanksLink:hover {
+  text-decoration: underline;
+}
+
 .link:hover {
   text-decoration: underline;
+}
+
+@media (max-width: 575.98px) {
+  .footerLogoImg {
+    display: none;
+  }
+
+  .mobileLogo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .mobileLogoImg {
+    max-width: 90px;
+  }
 }
