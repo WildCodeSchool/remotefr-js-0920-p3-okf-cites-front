@@ -5,53 +5,40 @@ import {
   RadialAxis,
   RadialAreaSeries,
   PieChart,
+  Heatmap,
 } from 'reaviz';
 import styles from './Data.module.css';
 
 export default function Data() {
   const { id } = useParams();
   const [datavis, setDatavis] = useState({
-    kingdomDataWikiId: '',
-    kingdomDataCites: '',
-    kingdomDataCommonFr: '',
-    kingdomDataCommonEn: '',
-    kingdomDataImage: '',
-    kingdomDataTotal: '',
-    kingdomDataArticle: '',
+    kingdomDataWikiId: null,
+    kingdomDataCites: null,
+    kingdomDataCommonFr: null,
+    kingdomDataCommonEn: null,
+    kingdomDataImage: null,
+    kingdomDataTotal: null,
+    kingdomDataArticle: null,
+    ClassDataDispatch: null,
+    ClassDataDispatchVeg: null,
+    ClassDataDispatchCites: null,
+    ClassDataDispatchVegCites: null,
+    ClassDataDispatchImage: null,
+    ClassDataDispatchCommonFr: null,
+    ClassDataDispatchCommonEn: null,
+    ClassDataDispatchWikiID: null,
+    ClassDataDispatchWikArticle: null,
+    ClassDataDispatchVegImage: null,
+    ClassDataDispatchVegCommonFr: null,
+    ClassDataDispatchVegCommonEn: null,
+    ClassDataDispatchVegWikiID: null,
+    ClassDataDispatchVegWikArticle: null,
   });
 
-  // const innerRadius = number('Inner Radius', 0.1);
   const innerRadius = 0.1;
-  // const animated = boolean('Animated', true);
+
   const animated = true;
-  // const hasGradient = boolean('Gradient', true);
 
-  // const autoRotate = boolean('Auto Rotate Labels', true);
-
-  // const color = select('Color Scheme', schemes, 'cybertron');
-
-  // const gradient = hasGradient ? <RadialGradient /> : null;
-  // const tickCount = number('Tick Count', 5);
-
-  // const arcCount = number('Arc Count', 10);
-
-  // const tickPosition = select(
-  //   'Tick Position',
-  //   {
-  //     inside: 'inside',
-  //     outside: 'outside',
-  //   },
-  //   'inside',
-  // );
-
-  // const interpolation = select(
-  //   'Interpolation',
-  //   {
-  //     linear: 'linear',
-  //     smooth: 'smooth',
-  //   },
-  //   'smooth',
-  // );
   const interpolation = 'smooth';
   const color = 'cybertron';
 
@@ -65,14 +52,14 @@ export default function Data() {
 
   return (
     <div className={styles.global}>
-      {datavis.kingdomDataWikiId[0] === undefined ? (
+      {datavis.kingdomDataWikiId?.[0] == null ? (
         ''
       ) : (
         <div className={styles.pie}>
           <h2 className={styles.titre}>Répartition des espèces</h2>
           <PieChart
-            height={300}
-            width={300}
+            height={500}
+            width={500}
             data={[
               { key: 'Animal', data: datavis.kingdomDataTotal[0].count },
               {
@@ -86,7 +73,7 @@ export default function Data() {
       )}
 
       <div className={styles.data}>
-        {datavis.kingdomDataWikiId[0] === undefined ? (
+        {datavis.kingdomDataWikiId?.[0] == null ? (
           ''
         ) : (
           <div>
@@ -123,30 +110,13 @@ export default function Data() {
                   colorScheme={color}
                   animated={animated}
                   interpolation={interpolation}
-                  // area={<RadialArea gradient={gradient} />}
                 />
               }
-              // axis={
-              //   <RadialAxis
-              //     arcs={<RadialAxisArcSeries count={arcCount} />}
-              //     ticks={
-              //       <RadialAxisTickSeries
-              //         count={tickCount}
-              //         tick={
-              //           <RadialAxisTick
-              //             line={<RadialAxisTickLine position={tickPosition} />}
-              //             label={<RadialAxisTickLabel autoRotate={autoRotate} />}
-              //           />
-              //         }
-              //       />
-              //     }
-              //   />
-              // }
             />
           </div>
         )}
 
-        {datavis.kingdomDataWikiId[1] === undefined ? (
+        {datavis.kingdomDataWikiId?.[0] == null ? (
           ''
         ) : (
           <div>
@@ -185,6 +155,177 @@ export default function Data() {
                   interpolation={interpolation}
                 />
               }
+            />
+          </div>
+        )}
+      </div>
+      <div className={styles.pieClass}>
+        {datavis.kingdomDataWikiId?.[0] == null ? (
+          ''
+        ) : (
+          <div className={styles.pie}>
+            <h2 className={styles.titre}>Classes au sein du règne animal</h2>
+            <PieChart
+              height={500}
+              width={500}
+              data={datavis.ClassDataDispatch.map((dispatchClass) => ({
+                key: `${dispatchClass.class}`,
+                data: dispatchClass.count,
+              }))}
+            />
+          </div>
+        )}
+
+        {datavis.kingdomDataWikiId?.[0] == null ? (
+          ''
+        ) : (
+          <div className={styles.pie}>
+            <h2 className={styles.titre}>Ordres au sein du règne Végétal</h2>
+            <PieChart
+              height={500}
+              width={500}
+              data={datavis.ClassDataDispatchVeg.map((dispatchClass) => ({
+                key: `${dispatchClass.order}`,
+                data: dispatchClass.count,
+              }))}
+            />
+          </div>
+        )}
+      </div>
+      <div className={styles.heat}>
+        {/* heatmap animalia
+         */}
+        {datavis.kingdomDataCites?.[0] == null ? (
+          ''
+        ) : (
+          <div>
+            <Heatmap
+              height={800}
+              width={500}
+              data={[
+                {
+                  key: 'Nom commun fr',
+                  data: datavis.ClassDataDispatchCommonFr.map(
+                    (dispatchClass) => ({
+                      key: `${dispatchClass.class}`,
+                      data: dispatchClass.count,
+                    }),
+                  ),
+                },
+                {
+                  key: 'Nom commun En',
+                  data: datavis.ClassDataDispatchCommonEn.map(
+                    (dispatchClass) => ({
+                      key: `${dispatchClass.class}`,
+                      data: dispatchClass.count,
+                    }),
+                  ),
+                },
+                {
+                  key: 'Cites',
+                  data: datavis.ClassDataDispatchCites.map((dispatchClass) => ({
+                    key: `${dispatchClass.class}`,
+                    data: dispatchClass.count,
+                  })),
+                },
+                {
+                  key: 'Images',
+                  data: datavis.ClassDataDispatchImage.map((dispatchClass) => ({
+                    key: `${dispatchClass.class}`,
+                    data: dispatchClass.count,
+                  })),
+                },
+
+                {
+                  key: 'Wiki ID',
+                  data: datavis.ClassDataDispatchWikiID.map(
+                    (dispatchClass) => ({
+                      key: `${dispatchClass.class}`,
+                      data: dispatchClass.count,
+                    }),
+                  ),
+                },
+                {
+                  key: 'WikiArticle',
+                  data: datavis.ClassDataDispatchWikArticle.map(
+                    (dispatchClass) => ({
+                      key: `${dispatchClass.class}`,
+                      data: dispatchClass.count,
+                    }),
+                  ),
+                },
+              ]}
+            />
+          </div>
+        )}
+
+        {/* heat map Végétal */}
+        {/* heatmap animalia
+         */}
+        {datavis.kingdomDataCites?.[0] == null ? (
+          ''
+        ) : (
+          <div>
+            <Heatmap
+              height={800}
+              width={500}
+              data={[
+                {
+                  key: 'Nom commun fr',
+                  data: datavis.ClassDataDispatchVegCommonFr.map(
+                    (dispatchClass) => ({
+                      key: `${dispatchClass.order}`,
+                      data: dispatchClass.count,
+                    }),
+                  ),
+                },
+                {
+                  key: 'Nom commun En',
+                  data: datavis.ClassDataDispatchVegCommonEn.map(
+                    (dispatchClass) => ({
+                      key: `${dispatchClass.order}`,
+                      data: dispatchClass.count,
+                    }),
+                  ),
+                },
+                {
+                  key: 'Cites',
+                  data: datavis.ClassDataDispatchVegCites.map(
+                    (dispatchClass) => ({
+                      key: `${dispatchClass.order}`,
+                      data: dispatchClass.count,
+                    }),
+                  ),
+                },
+                {
+                  key: 'Images',
+                  data: datavis.ClassDataDispatchVegImage.map(
+                    (dispatchClass) => ({
+                      key: `${dispatchClass.order}`,
+                      data: dispatchClass.count,
+                    }),
+                  ),
+                },
+
+                {
+                  key: 'Wiki ID',
+                  data: datavis.ClassDataDispatchVegWikiID.map(
+                    (dispatchClass) => ({
+                      key: `${dispatchClass.order}`,
+                      data: dispatchClass.count,
+                    }),
+                  ),
+                },
+                {
+                  key: 'WikiArticle',
+                  data: datavis.ClassDataDispatchVegWikArticle.map(
+                    (dispatchClass) => ({
+                      key: `${dispatchClass.order}`,
+                      data: dispatchClass.count,
+                    }),
+                  ),
+                },
+              ]}
             />
           </div>
         )}
