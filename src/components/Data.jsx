@@ -18,6 +18,8 @@ export default function Data() {
     kingdomDataImage: '',
     kingdomDataTotal: '',
     kingdomDataArticle: '',
+    ClassDataDispatch: '',
+    ClassDataDispatchVeg: '',
   });
 
   // const innerRadius = number('Inner Radius', 0.1);
@@ -185,6 +187,38 @@ export default function Data() {
                   interpolation={interpolation}
                 />
               }
+            />
+          </div>
+        )}
+      </div>
+      <div className={styles.pieClass}>
+        {datavis.kingdomDataWikiId[0] === undefined ? (
+          ''
+        ) : (
+          <div className={styles.pie}>
+            <h2 className={styles.titre}>Classes au sein du règne animal</h2>
+            <PieChart
+              height={500}
+              width={500}
+              data={datavis.ClassDataDispatch.map((dispatchClass) => ({
+                key: `${dispatchClass.class}`,
+                data: dispatchClass.count,
+              }))}
+            />
+          </div>
+        )}
+        {datavis.kingdomDataWikiId[0] === undefined ? (
+          ''
+        ) : (
+          <div className={styles.pie}>
+            <h2 className={styles.titre}>Classes au sein du règne Végétal</h2>
+            <PieChart
+              height={500}
+              width={500}
+              data={datavis.ClassDataDispatchVeg.map((dispatchClass) => ({
+                key: `${dispatchClass.order}`,
+                data: dispatchClass.count,
+              }))}
             />
           </div>
         )}
