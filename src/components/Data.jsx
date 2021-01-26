@@ -259,7 +259,6 @@ export default function Data() {
           </div>
         )}
 
-        {/* heat map Végétal */}
         {/* heatmap animalia
          */}
         {datavis.kingdomDataCites?.[0] == null ? (
