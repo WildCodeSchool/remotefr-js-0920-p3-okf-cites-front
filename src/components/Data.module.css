@@ -1,4 +1,6 @@
-
+.data{
+  margin-top:5%;
+}
 
 .tableau{
   height: 30vh;
@@ -16,4 +18,10 @@
   display: flex;
   flex-direction: row;
   justify-content: space-around;
+}
+.pie{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
 }
