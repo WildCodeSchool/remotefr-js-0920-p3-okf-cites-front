@@ -1,3 +1,12 @@
+.loadingError {
+  display: flex;
+  flex-direction: column;
+
+  font-family: 'Raleway', sans-serif;
+  font-size: 1.2rem;
+  color: var(--danger);
+}
+
 /*!
  * Load Awesome v1.1.0 (http://github.danielcardoso.net/load-awesome/)
  * Copyright 2015 Daniel Cardoso <@DanielCardoso>
