@@ -25,30 +25,28 @@ export default function Contribute() {
 
   return (
     <main>
-      <section className="container">
+      <section className={styles.intro}>
         <h2>Comment contribuer ?</h2>
         <p>
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quaerat nisi
-          excepturi molestias sequi recusandae, officia eaque fugit alias vel
-          animi corrupti amet suscipit error quod unde veniam quidem voluptates
-          at. Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi
-          blanditiis architecto, sed sapiente rerum inventore eos, quasi
-          perspiciatis consequatur quaerat consequuntur corporis pariatur quia
-          unde officiis autem voluptatem voluptatum numquam.
+          <span>C&apos;est simple.</span> Vous trouverez ici la liste des
+          espèces auxquelles il manque des données. Si vous avez des
+          informations concernant une espèce, vous pouvez cliquer sur celle-ci
+          et vous serez alors redirigé vers sa page Wikidata afin de participer
+          à l&apos;enrichissement de la base de données.
         </p>
       </section>
 
-      <section>
-        <h2>Espèces avec données manquantes</h2>
-
+      <section className={styles.container}>
+        <div className={styles.title}>
+          <h3>Liste d&apos;espèces avec données manquantes</h3>
+        </div>
         <button
           className={styles.button}
           type="button"
           onClick={fetchSpeciesWithMissingData}
         >
-          Voir d'autres espèces
+          Voir d&apos;autres espèces
         </button>
-
         <div className={styles.content}>
           <Loading loading={loading}>
             <SpeciesCardList
