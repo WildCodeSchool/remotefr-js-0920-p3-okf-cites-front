@@ -43,12 +43,10 @@ export default function Data() {
   const color = 'cybertron';
 
   useEffect(() => {
-    fetch(`http://localhost:5000/api/species/datavis`)
+    fetch(`${process.env.REACT_APP_API_URL}/api/species/datavis`)
       .then((res) => res.json())
       .then((datavis_) => setDatavis(datavis_));
   }, [id]);
-
-  console.log(datavis);
 
   return (
     <div className={styles.global}>
