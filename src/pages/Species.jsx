@@ -132,11 +132,12 @@ export default function Species() {
             l'objet issu du spécimen.
           </p>
           <p className={styles.contribute}>
-            Cette page manque d&apos;informations. <br /> Vous souhaitez
-            contribuer ? Vous pouvez vous rendre sur cette page :
+            Cette page manque d&apos;informations. <br /> Contribuez à
+            l&apos;enrichissement de la base de données en vous rendant sur
+            cette page : <br />
             <a href={`https://www.wikidata.org/wiki/${species.wikidata_id}`}>
               {' '}
-              Lien vers la page Wikidata
+              <span>Page Wikidata de l&apos;espèce</span>
             </a>
           </p>
 
