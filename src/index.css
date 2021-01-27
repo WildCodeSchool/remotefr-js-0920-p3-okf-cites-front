@@ -43,9 +43,25 @@ No media query since the extra-large breakpoint has no upper bound on its width
   box-sizing: border-box;
 }
 
+html,
+body,
+#root {
+  height: 100%;
+}
+
 body {
   margin: 0;
   font-family: 'Playfair Display', serif;
+}
+
+#root {
+  /* For sticky footer */
+  display: flex;
+  flex-direction: column;
+}
+.content {
+  /* For sticky footer */
+  flex: 1 0 auto;
 }
 
 h1,

@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import IcomoonReact from 'icomoon-react';
 
 import styles from './Species.module.css';
 import iconSet from '../assets/selection.json';
 import CITES from '../components/CITES';
-import { Loading } from '../components/Loading';
+import { Loading, LoadingState } from '../components/Loading';
 
 function CountryList({ label, countries }) {
   if (countries == null) return '';
@@ -58,22 +58,27 @@ export default function Species() {
     subspecies: '',
     name: '',
     common_name: '',
-    cites: '',
+    cites: '?',
     summary: '',
     image_url: '',
     countries: {},
     wikidata_id: '',
   });
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(LoadingState.Loading);
 
-  useEffect(() => {
-    setLoading(true);
+  const fetchSpecies = useCallback(() => {
+    setLoading(LoadingState.Loading);
 
-    fetch(`http://localhost:5000/species/${id}`)
+    fetch(`${process.env.REACT_APP_API_URL}/api/species/${id}`)
       .then((res) => res.json())
-      .then((species_) => setSpecies(species_))
-      .finally(() => setLoading(false));
+      .then((species_) => {
+        setSpecies(species_);
+        setLoading(LoadingState.NotLoading);
+      })
+      .catch(() => setLoading(LoadingState.Error));
   }, [id]);
+
+  useEffect(fetchSpecies, [fetchSpecies]);
 
   return (
     <main className={styles.speciesDetails}>
@@ -93,7 +98,7 @@ export default function Species() {
       </div>
 
       <section className={`${styles.speciesDetailsContent} container`}>
-        <Loading loading={loading}>
+        <Loading state={loading} onTryAgain={fetchSpecies}>
           <p className={styles.classification}>
             {[
               species.kingdom,

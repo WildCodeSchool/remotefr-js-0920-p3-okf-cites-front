@@ -12,7 +12,7 @@ import {
   FilterGroup,
   FilterOption,
 } from '../components/Filters';
-import { Loading } from '../components/Loading';
+import { Loading, LoadingState } from '../components/Loading';
 
 function ExploreHeader({ searchValue, onSearchChange, onSearchSubmit }) {
   return (
@@ -59,12 +59,12 @@ export default function Explore() {
   const [filtersSelected, setFiltersSelected] = useState(() => {
     const searchParams = new URLSearchParams(location.search);
     return {
-      animal: searchParams.getAll('animal') ?? [],
+      class: searchParams.getAll('class') ?? [],
       plant: searchParams.get('plant') === 'true',
       cites: searchParams.getAll('cites') ?? [],
     };
   });
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(LoadingState.NotLoading);
 
   const [counts, setCounts] = useState({
     total: '?',
@@ -72,48 +72,44 @@ export default function Explore() {
   const [species, setSpecies] = useState([]);
 
   // Pass state by argument to avoid stale references while keeping the same function reference to debounce
-  const fetchSpecies = useCallback(
-    async (
-      searchQuery_,
-      filtersSelected_,
-      setLoading_,
-      setSpecies_,
-      setCounts_,
-    ) => {
-      const url = new URL(`http://localhost:5000/species/search`);
-      url.searchParams.append('query', searchQuery_);
-      url.searchParams.append('plant', filtersSelected_.plant);
-      filtersSelected_.animal.forEach((animalClass) =>
-        url.searchParams.append('animal[]', animalClass),
-      );
-      filtersSelected_.cites.forEach((c) =>
-        url.searchParams.append('cites[]', c),
-      );
+  const fetchSpecies = useCallback(async (searchQuery_, filtersSelected_) => {
+    const url = new URL('/api/species/search', process.env.REACT_APP_API_URL);
+    url.searchParams.append('query', searchQuery_);
 
-      setLoading_(true);
+    if (filtersSelected_.plant) {
+      url.searchParams.append('kingdom[]', 'Plantae');
+    }
+    if (filtersSelected_.class.length > 0) {
+      url.searchParams.append('kingdom[]', 'Animalia');
+    }
 
-      try {
-        const res = await fetch(url);
-        const { species: newSpecies, counts: counts_ } = await res.json();
+    filtersSelected_.class.forEach((animalClass) =>
+      url.searchParams.append('class[]', animalClass),
+    );
 
-        setSpecies_(newSpecies);
-        setCounts_(counts_);
-      } finally {
-        setLoading_(false);
-      }
-    },
-    [],
-  );
+    // Add I/II if I or II is selected
+    const cites = [...filtersSelected_.cites];
+    if (cites.includes('I') || cites.includes('II')) cites.push('I/II');
+    cites.forEach((c) => url.searchParams.append('cites[]', c));
+
+    setLoading(LoadingState.Loading);
+
+    try {
+      const res = await fetch(url);
+      const { species: newSpecies, counts: counts_ } = await res.json();
+
+      setSpecies(newSpecies);
+      setCounts(counts_);
+
+      setLoading(LoadingState.NotLoading);
+    } catch {
+      setLoading(LoadingState.Error);
+    }
+  }, []);
   const fetchSpeciesDebounced = useCallback(debounce(fetchSpecies, 1000), []);
 
   useMount(() => {
-    fetchSpecies(
-      searchQuery,
-      filtersSelected,
-      setLoading,
-      setSpecies,
-      setCounts,
-    );
+    fetchSpecies(searchQuery, filtersSelected);
   });
 
   useEffectAfterMount(() => {
@@ -123,8 +119,8 @@ export default function Explore() {
       searchParams.append('query', searchQuery);
     }
 
-    filtersSelected.animal.forEach((val) => {
-      searchParams.append('animal', val);
+    filtersSelected.class.forEach((val) => {
+      searchParams.append('class', val);
     });
 
     searchParams.append('plant', filtersSelected.plant.toString());
@@ -136,13 +132,7 @@ export default function Explore() {
     location.search = searchParams.toString();
     history.replace(location);
 
-    fetchSpeciesDebounced(
-      searchQuery,
-      filtersSelected,
-      setLoading,
-      setSpecies,
-      setCounts,
-    );
+    fetchSpeciesDebounced(searchQuery, filtersSelected);
   }, [searchQuery, filtersSelected, fetchSpeciesDebounced]);
 
   return (
@@ -169,7 +159,7 @@ export default function Explore() {
               onSelect={setFiltersSelected}
             >
               <Filter
-                name="animal"
+                name="class"
                 label="Faune"
                 count={counts.kingdom?.animalia}
               >
@@ -263,23 +253,39 @@ export default function Explore() {
                 <FilterOption
                   value="I"
                   label="Espèces menacées (Annexe I)"
-                  count={counts.cites?.I}
+                  count={
+                    counts.cites &&
+                    (counts.cites.I ?? 0) + (counts.cites['I/II'] ?? 0)
+                  }
                 />
                 <FilterOption
                   value="II"
                   label="Espèces vulnérables (Annexe II)"
-                  count={counts.cites?.II}
+                  count={
+                    counts.cites &&
+                    (counts.cites.II ?? 0) + (counts.cites['I/II'] ?? 0)
+                  }
                 />
                 <FilterOption
                   value="III"
                   label="Espèces vulnérables (Annexe III)"
                   count={counts.cites?.III}
                 />
+                <FilterOption
+                  value="?"
+                  label="Annexe inconnu (Annexe ?)"
+                  count={counts.cites?.['?']}
+                />
               </Filter>
             </FilterGroup>
           </aside>
           <main className={styles.main}>
-            <Loading loading={loading}>
+            <Loading
+              state={loading}
+              onTryAgain={() => {
+                fetchSpecies(searchQuery, filtersSelected);
+              }}
+            >
               {species.length > 0 ? (
                 <SpeciesCardList
                   species={species}
@@ -288,7 +294,7 @@ export default function Explore() {
                   }}
                 />
               ) : (
-                <p>Aucune expèce trouvée</p>
+                <p>Aucune espèce trouvée</p>
               )}
             </Loading>
           </main>

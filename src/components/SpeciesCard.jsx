@@ -23,7 +23,11 @@ export function SpeciesCard({
           <img
             className={styles.image}
             alt="" // The species' name is already in the <figcaption>, no need to repeat the same info twice
-            src={imageUrl}
+            src={
+              imageUrl == null
+                ? '/placeholder.svg'
+                : `${process.env.REACT_APP_API_URL}/api/species/${id}/small-image`
+            }
           />
           <figcaption className={styles.figcaption}>
             <h2 className={styles.vernacular}>{commonName}</h2>
@@ -43,14 +47,14 @@ export function SpeciesCard({
 SpeciesCard.defaultProps = {
   commonName: '',
   summary: '',
-  imageUrl: '/placeholder.svg',
+  imageUrl: null,
   linkState: undefined,
 };
 SpeciesCard.propTypes = {
   id: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
   commonName: PropTypes.string,
-  cites: PropTypes.oneOf(['I', 'I/II', 'II', 'III']).isRequired,
+  cites: PropTypes.oneOf(['I', 'I/II', 'II', 'III', '?']).isRequired,
   summary: PropTypes.string,
   imageUrl: PropTypes.string,
   linkState: PropTypes.objectOf(PropTypes.string),

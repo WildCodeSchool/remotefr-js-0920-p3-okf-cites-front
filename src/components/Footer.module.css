@@ -1,0 +1,72 @@
+.footer {
+  background-color: var(--gray-blue);
+  color: var(--light-blue);
+  padding: 1.5rem;
+
+  flex-shrink: 0; /* For sticky footer */
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  letter-spacing: 0.1px;
+}
+
+.footerLogoImg {
+  max-width: 100px;
+  vertical-align: middle;
+  margin: 5px 15px;
+}
+
+.mobileLogo {
+  display: none;
+}
+
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.list li {
+  display: contents;
+}
+
+.link {
+  color: inherit;
+  text-decoration: inherit;
+  padding: 0.5rem;
+  font-weight: 700;
+}
+
+.thanksLink {
+  color: inherit;
+  text-decoration: inherit;
+  font-weight: 700;
+}
+
+.thanksLink:hover {
+  text-decoration: underline;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 575.98px) {
+  .footerLogoImg {
+    display: none;
+  }
+
+  .mobileLogo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .mobileLogoImg {
+    max-width: 90px;
+  }
+}

@@ -1,0 +1,40 @@
+.data{
+  margin-top:5%;
+}
+
+.tableau{
+  height: 30vh;
+  width : 50%;
+  margin-top: 10vh;
+ margin-left: 35%;
+}
+
+.titre{
+  text-align: center;
+  font-size: 1em;
+}
+
+.data{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+.pie{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.pieClass{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+
+}
+.heat{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+
+}
