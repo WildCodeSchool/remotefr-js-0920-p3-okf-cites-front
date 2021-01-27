@@ -21,7 +21,7 @@ export default function Contribute() {
 
   useEffect(() => {
     fetchSpeciesWithMissingData();
-  }, []);
+  }, [fetchSpeciesWithMissingData]);
 
   return (
     <main>
