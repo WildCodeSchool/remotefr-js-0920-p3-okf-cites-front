@@ -62,59 +62,60 @@ export default function Contribute() {
                   >
                     {speciesCard}
                   </a>
-
-                  <table className={styles.table}>
-                    <tbody>
-                      <tr>
-                        <th scope="row">Nom vernaculaire français : </th>
-                        <td>
-                          {singleSpecies.common_name_fr ?? (
-                            <strong>Donnée manquante</strong>
-                          )}
-                        </td>
-                      </tr>
-                      <tr>
-                        <th scope="row">Nom vernaculaire anglais : </th>
-                        <td>
-                          {singleSpecies.common_name_en ?? (
-                            <strong>Donnée manquante</strong>
-                          )}
-                        </td>
-                      </tr>
-                      <tr>
-                        <th scope="row">Image : </th>
-                        <td>
-                          {singleSpecies.image_url ? (
-                            <a
-                              href={singleSpecies.image_url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              {singleSpecies.image_url}
-                            </a>
-                          ) : (
-                            <strong>Donnée manquante</strong>
-                          )}
-                        </td>
-                      </tr>
-                      <tr>
-                        <th scope="row">Article wikipedia français : </th>
-                        <td>
-                          {singleSpecies.wikipedia_url ? (
-                            <a
-                              href={singleSpecies.wikipedia_url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              {singleSpecies.wikipedia_url}
-                            </a>
-                          ) : (
-                            <strong>Donnée manquante</strong>
-                          )}
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
+                  <div className={styles.tableWrapper}>
+                    <table className={styles.table}>
+                      <tbody>
+                        <tr>
+                          <th scope="row">Nom vernaculaire français : </th>
+                          <td>
+                            {singleSpecies.common_name_fr ?? (
+                              <strong>Donnée manquante</strong>
+                            )}
+                          </td>
+                        </tr>
+                        <tr>
+                          <th scope="row">Nom vernaculaire anglais : </th>
+                          <td>
+                            {singleSpecies.common_name_en ?? (
+                              <strong>Donnée manquante</strong>
+                            )}
+                          </td>
+                        </tr>
+                        <tr>
+                          <th scope="row">Image : </th>
+                          <td>
+                            {singleSpecies.image_url ? (
+                              <a
+                                href={singleSpecies.image_url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                {singleSpecies.image_url}
+                              </a>
+                            ) : (
+                              <strong>Donnée manquante</strong>
+                            )}
+                          </td>
+                        </tr>
+                        <tr>
+                          <th scope="row">Article wikipedia français : </th>
+                          <td>
+                            {singleSpecies.wikipedia_url ? (
+                              <a
+                                href={singleSpecies.wikipedia_url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                {singleSpecies.wikipedia_url}
+                              </a>
+                            ) : (
+                              <strong>Donnée manquante</strong>
+                            )}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
                 </>
               )}
             />
