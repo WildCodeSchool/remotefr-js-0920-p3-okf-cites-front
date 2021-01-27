@@ -66,6 +66,14 @@ export default function Contribute() {
                     <table className={styles.table}>
                       <tbody>
                         <tr>
+                          <th scope="row">Id Species+ : </th>
+                          <td>
+                            {singleSpecies['species+_id'] ?? (
+                              <strong>Donnée manquante</strong>
+                            )}
+                          </td>
+                        </tr>
+                        <tr>
                           <th scope="row">Nom vernaculaire français : </th>
                           <td>
                             {singleSpecies.common_name_fr ?? (
