@@ -35,6 +35,7 @@ const citesDescription = {
     'Espèce pouvant être menacée d`extinction si le commerce de leurs spécimens n`est pas étroitement contrôlé. Le commerce international de leurs spécimens peut être autorisé lorsqu`un permis d`exportation ou de réexportation est délivré.',
   III:
     'Espèce vulnérable. Le commerce international de leurs spécimens n`est autorisé que sur présentation des permis ou certificats appropriés.',
+  '?': 'Annexe inconnu ou incertain',
 };
 
 function CitesDescription({ cites }) {
