@@ -3,14 +3,18 @@ import PropTypes from 'prop-types';
 import styles from './SpeciesCard.module.css';
 import CITES from './CITES';
 
-export function SpeciesCard({ name, commonName, cites, imageUrl }) {
+export function SpeciesCard({ id, name, commonName, cites, imageUrl }) {
   return (
     <article className={styles.card}>
       <figure className={styles.figure}>
         <img
           className={styles.image}
           alt="" // The species' name is already in the <figcaption>, no need to repeat the same info twice
-          src={imageUrl}
+          src={
+            imageUrl == null
+              ? '/placeholder.svg'
+              : `${process.env.REACT_APP_API_URL}/api/species/${id}/small-image`
+          }
         />
         <figcaption className={styles.figcaption}>
           <h2 className={styles.vernacular}>{commonName}</h2>
@@ -26,9 +30,10 @@ export function SpeciesCard({ name, commonName, cites, imageUrl }) {
 }
 SpeciesCard.defaultProps = {
   commonName: '',
-  imageUrl: '/placeholder.svg',
+  imageUrl: null,
 };
 SpeciesCard.propTypes = {
+  id: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
   commonName: PropTypes.string,
   cites: PropTypes.oneOf(['I', 'I/II', 'II', 'III', '?']).isRequired,
@@ -41,6 +46,7 @@ export function SpeciesCardList({ species, cardContent }) {
       {species.map((singleSpecies) => {
         const speciesCardEl = (
           <SpeciesCard
+            id={singleSpecies.id}
             name={singleSpecies.name}
             commonName={singleSpecies.common_name ?? singleSpecies.commonName}
             cites={singleSpecies.cites}
