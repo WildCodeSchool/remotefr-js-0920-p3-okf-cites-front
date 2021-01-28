@@ -68,15 +68,15 @@
   --species-card-width: min(400px, 90vw);
 }
 
-.table {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: var(--dark-blue);
-
+.tableWrapper {
   max-width: 90vw;
   overflow-x: auto;
-  margin: 20px 0;
+}
+
+.table {
+  color: var(--dark-blue);
+
+  margin: 20px auto;
 }
 
 .table th {
@@ -85,7 +85,7 @@
 
 .table a {
   display: block;
-  width: 200px;
+  width: 150px;
 
   white-space: nowrap;
   overflow: hidden;

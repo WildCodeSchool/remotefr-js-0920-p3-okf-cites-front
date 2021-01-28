@@ -1,74 +1,335 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import {
+  RadialAreaChart,
+  RadialAxis,
+  RadialAreaSeries,
+  PieChart,
+  Heatmap,
+} from 'reaviz';
 import styles from './Data.module.css';
 
 export default function Data() {
-  useEffect(() => {
-    const divElement = document.getElementById('viz1611045298454');
-    const vizElement = divElement.getElementsByTagName('object')[0];
-    vizElement.style.width = '100%';
-    vizElement.style.height = `${divElement.offsetWidth * 0.75}px`;
-    const scriptElement = document.createElement('script');
-    scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';
-    vizElement.parentNode.insertBefore(scriptElement, vizElement);
-
-    const divElement1 = document.getElementById('viz1611046672812');
-    const vizElement1 = divElement1.getElementsByTagName('object')[0];
-    vizElement1.style.width = '100%';
-    vizElement1.style.height = `${divElement1.offsetWidth * 0.75}px`;
-    const scriptElement1 = document.createElement('script');
-    scriptElement1.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';
-    vizElement1.parentNode.insertBefore(scriptElement1, vizElement1);
+  const { id } = useParams();
+  const [datavis, setDatavis] = useState({
+    kingdomDataWikiId: null,
+    kingdomDataCites: null,
+    kingdomDataCommonFr: null,
+    kingdomDataCommonEn: null,
+    kingdomDataImage: null,
+    kingdomDataTotal: null,
+    kingdomDataArticle: null,
+    ClassDataDispatch: null,
+    ClassDataDispatchVeg: null,
+    ClassDataDispatchCites: null,
+    ClassDataDispatchVegCites: null,
+    ClassDataDispatchImage: null,
+    ClassDataDispatchCommonFr: null,
+    ClassDataDispatchCommonEn: null,
+    ClassDataDispatchWikiID: null,
+    ClassDataDispatchWikArticle: null,
+    ClassDataDispatchVegImage: null,
+    ClassDataDispatchVegCommonFr: null,
+    ClassDataDispatchVegCommonEn: null,
+    ClassDataDispatchVegWikiID: null,
+    ClassDataDispatchVegWikArticle: null,
   });
 
+  const innerRadius = 0.1;
+
+  const animated = true;
+
+  const interpolation = 'smooth';
+  const color = 'cybertron';
+
+  useEffect(() => {
+    fetch(`http://localhost:5000/api/species/datavis`)
+      .then((res) => res.json())
+      .then((datavis_) => setDatavis(datavis_));
+  }, [id]);
+
+  console.log(datavis);
+
   return (
-    <div className={styles.data}>
-      <h1 className={styles.titre}>Quelques informations</h1>
-      <div
-        id="viz1611046672812"
-        style={{ position: 'relative' }}
-        className={styles.tableau}
-      >
-        <object className="tableauViz" style={{ display: 'none' }}>
-          <param name="host_url" value="https%3A%2F%2Fpublic.tableau.com%2F" />{' '}
-          <param name="embed_code_version" value="3" />{' '}
-          <param name="site_root" value="" />
-          <param name="name" value="carteespcesrglementes&#47;Feuille1" />
-          <param name="tabs" value="no" />
-          <param name="toolbar" value="yes" />
-          <param
-            name="static_image"
-            value="https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;ca&#47;carteespcesrglementes&#47;Feuille1&#47;1.png"
+    <div className={styles.global}>
+      {datavis.kingdomDataWikiId?.[0] == null ? (
+        ''
+      ) : (
+        <div className={styles.pie}>
+          <h2 className={styles.titre}>Répartition des espèces</h2>
+          <PieChart
+            height={500}
+            width={500}
+            data={[
+              { key: 'Animal', data: datavis.kingdomDataTotal[0].count },
+              {
+                key: 'Végétal',
+                data: datavis.kingdomDataTotal[1].count,
+                color: 'c',
+              },
+            ]}
           />
-          <param name="animate_transition" value="yes" />
-          <param name="display_static_image" value="yes" />
-          <param name="display_spinner" value="yes" />
-          <param name="display_overlay" value="yes" />
-          <param name="display_count" value="yes" />
-          <param name="language" value="fr" />
-        </object>
+        </div>
+      )}
+
+      <div className={styles.data}>
+        {datavis.kingdomDataWikiId?.[0] == null ? (
+          ''
+        ) : (
+          <div>
+            <h2 className={styles.titre}>
+              Informations manquantes parmi les animaux
+            </h2>
+            <RadialAreaChart
+              height={450}
+              width={450}
+              data={[
+                {
+                  key: 'ID Wikidata',
+                  data: datavis.kingdomDataWikiId[0].count,
+                },
+                { key: 'CITES', data: datavis.kingdomDataCites[0].count },
+                { key: 'Photo', data: datavis.kingdomDataImage[0].count },
+                {
+                  key: 'Nom commun fr',
+                  data: datavis.kingdomDataCommonFr[0].count,
+                },
+                {
+                  key: 'Description',
+                  data: datavis.kingdomDataArticle[0].count,
+                },
+                {
+                  key: 'Nom commun En',
+                  data: datavis.kingdomDataCommonEn[0].count,
+                },
+              ]}
+              innerRadius={innerRadius}
+              axis={<RadialAxis type="category" />}
+              series={
+                <RadialAreaSeries
+                  colorScheme={color}
+                  animated={animated}
+                  interpolation={interpolation}
+                />
+              }
+            />
+          </div>
+        )}
+
+        {datavis.kingdomDataWikiId?.[0] == null ? (
+          ''
+        ) : (
+          <div>
+            <h2 className={styles.titre}>
+              Informations manquantes parmi les plantes
+            </h2>
+            <RadialAreaChart
+              height={450}
+              width={450}
+              data={[
+                {
+                  key: 'ID Wikidata',
+                  data: datavis.kingdomDataWikiId[1].count,
+                },
+                { key: 'CITES', data: datavis.kingdomDataCites[1].count },
+                { key: 'Photo', data: datavis.kingdomDataImage[1].count },
+                {
+                  key: 'Nom commun fr',
+                  data: datavis.kingdomDataCommonFr[1].count,
+                },
+                {
+                  key: 'Description',
+                  data: datavis.kingdomDataArticle[1].count,
+                },
+                {
+                  key: 'Nom commun En',
+                  data: datavis.kingdomDataCommonEn[1].count,
+                },
+              ]}
+              innerRadius={innerRadius}
+              axis={<RadialAxis type="category" />}
+              series={
+                <RadialAreaSeries
+                  colorScheme={color}
+                  animated={animated}
+                  interpolation={interpolation}
+                />
+              }
+            />
+          </div>
+        )}
       </div>
-      <div
-        id="viz1611045298454"
-        style={{ position: 'relative' }}
-        className={styles.map}
-      >
-        <object className="tableauViz" style={{ display: 'none' }}>
-          <param name="host_url" value="https%3A%2F%2Fpublic.tableau.com%2F" />{' '}
-          <param name="embed_code_version" value="3" />{' '}
-          <param name="path" value="shared&#47;7YHT6BJ9Y" />{' '}
-          <param name="toolbar" value="yes" />
-          <param
-            name="static_image"
-            value="https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;7Y&#47;7YHT6BJ9Y&#47;1.png"
-          />{' '}
-          <param name="animate_transition" value="yes" />
-          <param name="display_static_image" value="yes" />
-          <param name="display_spinner" value="yes" />
-          <param name="display_overlay" value="yes" />
-          <param name="display_count" value="yes" />
-          <param name="language" value="fr" />
-        </object>
-      </div>{' '}
+      <div className={styles.pieClass}>
+        {datavis.kingdomDataWikiId?.[0] == null ? (
+          ''
+        ) : (
+          <div className={styles.pie}>
+            <h2 className={styles.titre}>Classes au sein du règne animal</h2>
+            <PieChart
+              height={500}
+              width={500}
+              data={datavis.ClassDataDispatch.map((dispatchClass) => ({
+                key: `${dispatchClass.class}`,
+                data: dispatchClass.count,
+              }))}
+            />
+          </div>
+        )}
+
+        {datavis.kingdomDataWikiId?.[0] == null ? (
+          ''
+        ) : (
+          <div className={styles.pie}>
+            <h2 className={styles.titre}>Ordres au sein du règne Végétal</h2>
+            <PieChart
+              height={500}
+              width={500}
+              data={datavis.ClassDataDispatchVeg.map((dispatchClass) => ({
+                key: `${dispatchClass.order}`,
+                data: dispatchClass.count,
+              }))}
+            />
+          </div>
+        )}
+      </div>
+      <div className={styles.heat}>
+        {/* heatmap animalia
+         */}
+        {datavis.kingdomDataCites?.[0] == null ? (
+          ''
+        ) : (
+          <div>
+            <Heatmap
+              height={800}
+              width={500}
+              data={[
+                {
+                  key: 'Nom commun fr',
+                  data: datavis.ClassDataDispatchCommonFr.map(
+                    (dispatchClass) => ({
+                      key: `${dispatchClass.class}`,
+                      data: dispatchClass.count,
+                    }),
+                  ),
+                },
+                {
+                  key: 'Nom commun En',
+                  data: datavis.ClassDataDispatchCommonEn.map(
+                    (dispatchClass) => ({
+                      key: `${dispatchClass.class}`,
+                      data: dispatchClass.count,
+                    }),
+                  ),
+                },
+                {
+                  key: 'Cites',
+                  data: datavis.ClassDataDispatchCites.map((dispatchClass) => ({
+                    key: `${dispatchClass.class}`,
+                    data: dispatchClass.count,
+                  })),
+                },
+                {
+                  key: 'Images',
+                  data: datavis.ClassDataDispatchImage.map((dispatchClass) => ({
+                    key: `${dispatchClass.class}`,
+                    data: dispatchClass.count,
+                  })),
+                },
+
+                {
+                  key: 'Wiki ID',
+                  data: datavis.ClassDataDispatchWikiID.map(
+                    (dispatchClass) => ({
+                      key: `${dispatchClass.class}`,
+                      data: dispatchClass.count,
+                    }),
+                  ),
+                },
+                {
+                  key: 'WikiArticle',
+                  data: datavis.ClassDataDispatchWikArticle.map(
+                    (dispatchClass) => ({
+                      key: `${dispatchClass.class}`,
+                      data: dispatchClass.count,
+                    }),
+                  ),
+                },
+              ]}
+            />
+          </div>
+        )}
+
+        {/* heat map Végétal */}
+        {/* heatmap animalia
+         */}
+        {datavis.kingdomDataCites?.[0] == null ? (
+          ''
+        ) : (
+          <div>
+            <Heatmap
+              height={800}
+              width={500}
+              data={[
+                {
+                  key: 'Nom commun fr',
+                  data: datavis.ClassDataDispatchVegCommonFr.map(
+                    (dispatchClass) => ({
+                      key: `${dispatchClass.order}`,
+                      data: dispatchClass.count,
+                    }),
+                  ),
+                },
+                {
+                  key: 'Nom commun En',
+                  data: datavis.ClassDataDispatchVegCommonEn.map(
+                    (dispatchClass) => ({
+                      key: `${dispatchClass.order}`,
+                      data: dispatchClass.count,
+                    }),
+                  ),
+                },
+                {
+                  key: 'Cites',
+                  data: datavis.ClassDataDispatchVegCites.map(
+                    (dispatchClass) => ({
+                      key: `${dispatchClass.order}`,
+                      data: dispatchClass.count,
+                    }),
+                  ),
+                },
+                {
+                  key: 'Images',
+                  data: datavis.ClassDataDispatchVegImage.map(
+                    (dispatchClass) => ({
+                      key: `${dispatchClass.order}`,
+                      data: dispatchClass.count,
+                    }),
+                  ),
+                },
+
+                {
+                  key: 'Wiki ID',
+                  data: datavis.ClassDataDispatchVegWikiID.map(
+                    (dispatchClass) => ({
+                      key: `${dispatchClass.order}`,
+                      data: dispatchClass.count,
+                    }),
+                  ),
+                },
+                {
+                  key: 'WikiArticle',
+                  data: datavis.ClassDataDispatchVegWikArticle.map(
+                    (dispatchClass) => ({
+                      key: `${dispatchClass.order}`,
+                      data: dispatchClass.count,
+                    }),
+                  ),
+                },
+              ]}
+            />
+          </div>
+        )}
+      </div>
     </div>
   );
 }
