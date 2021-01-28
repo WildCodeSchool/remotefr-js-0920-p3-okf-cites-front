@@ -23,6 +23,10 @@
   display: flex;
 }
 
+.inputbuttonwrapper:enabled {
+  background-color: var(--light-blue);
+}
+
 .searchbar {
   border: none;
   width: 100%;

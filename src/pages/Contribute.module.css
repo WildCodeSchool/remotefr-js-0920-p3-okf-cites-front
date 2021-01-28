@@ -42,8 +42,7 @@
 
 .button {
   padding: 20px;
-  margin: 20px 50px;
-
+  margin: 0px 10px 30px 70px;
   cursor: pointer;
   background: none;
   border: 2px solid;
@@ -107,5 +106,17 @@
 
   .intro p {
     max-width: 90%;
+  }
+
+  h3 {
+    text-align: center;
+  }
+
+  .title {
+    flex-direction: column;
+  }
+
+  .button {
+    margin: 20px 0;
   }
 }

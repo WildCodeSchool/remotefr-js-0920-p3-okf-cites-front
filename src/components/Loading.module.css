@@ -1,10 +1,29 @@
 .loadingError {
   display: flex;
   flex-direction: column;
+  margin-top: 200px;
 
   font-family: 'Raleway', sans-serif;
-  font-size: 1.2rem;
+  font-size: 1.7rem;
   color: var(--danger);
+}
+
+.loadingError button {
+  cursor: pointer;
+  max-width: 50%;
+  align-self: center;
+  padding: 1em 1em;
+  margin: 30px;
+  text-decoration: none;
+  background: var(--gray-blue);
+  color: #fff;
+  border-bottom: solid 4px var(--dark-blue);
+  border-radius: 3px;
+}
+
+.loadingError button:hover {
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+    rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
 }
 
 /*!
@@ -14,6 +33,7 @@
  */
 .la-ball-atom,
 .la-ball-atom > div {
+  margin-top: 200px;
   position: relative;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -33,6 +53,7 @@
 }
 .la-ball-atom {
   width: 32px;
+
   height: 32px;
 }
 .la-ball-atom > div:nth-child(1) {
@@ -260,5 +281,16 @@
     -moz-transform: translate(-50%, -50%) scale(0.8, 0.8);
     -o-transform: translate(-50%, -50%) scale(0.8, 0.8);
     transform: translate(-50%, -50%) scale(0.8, 0.8);
+  }
+}
+
+@media (max-width: 575.98px) {
+  .loadingError {
+    margin: 20px;
+  }
+
+  .la-ball-atom > div {
+    margin: 0;
+    padding: 0;
   }
 }
