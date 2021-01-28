@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Searchbar from '../components/Searchbar';
 import { SpeciesCardList } from '../components/SpeciesCard';
@@ -289,9 +289,20 @@ export default function Explore() {
               {species.length > 0 ? (
                 <SpeciesCardList
                   species={species}
-                  linkState={{
-                    prevSearchPath: location.pathname + location.search,
-                  }}
+                  /* Add Link around species cards */
+                  cardContent={(speciesCard, { id }) => (
+                    <Link
+                      to={{
+                        pathname: `/espece/${id}`,
+                        state: {
+                          prevSearchPath: location.pathname + location.search,
+                        },
+                      }}
+                      className={styles.link}
+                    >
+                      {speciesCard}
+                    </Link>
+                  )}
                 />
               ) : (
                 <p>Aucune espèce trouvée</p>
