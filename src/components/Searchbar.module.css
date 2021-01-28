@@ -23,6 +23,10 @@
   display: flex;
 }
 
+.inputbuttonwrapper:enabled {
+  background-color: var(--light-blue);
+}
+
 .searchbar {
   border: none;
   width: 100%;
@@ -37,7 +41,7 @@
 .searchButton {
   background: linear-gradient(
     149deg,
-    rgba(27, 89, 247, 1) 0%,
+    rgb(51, 89, 185) 0%,
     rgba(7, 22, 62, 1) 100%
   );
   border: transparent;

@@ -39,14 +39,15 @@ export default function Contribute() {
       <section className={styles.container}>
         <div className={styles.title}>
           <h3>Liste d&apos;espèces avec données manquantes</h3>
+          <button
+            className={styles.button}
+            type="button"
+            onClick={fetchSpeciesWithMissingData}
+          >
+            Voir d&apos;autres espèces
+          </button>
         </div>
-        <button
-          className={styles.button}
-          type="button"
-          onClick={fetchSpeciesWithMissingData}
-        >
-          Voir d&apos;autres espèces
-        </button>
+
         <div className={styles.content}>
           <Loading loading={loading}>
             <SpeciesCardList
