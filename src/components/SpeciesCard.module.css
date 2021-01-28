@@ -2,20 +2,15 @@
   flex-grow: 1;
 
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(min(var(--species-card-width, 300px), 100%), 1fr)
+  );
   grid-gap: 0.5rem;
 
   list-style: none;
   padding: 0;
   margin: 0;
-}
-
-.link {
-  color: inherit;
-  text-decoration: inherit;
-}
-.link:hover {
-  text-decoration: underline;
 }
 
 .card {
@@ -52,7 +47,7 @@
   transition: opacity 0.25s ease;
 }
 
-.link:hover .cites {
+.card:hover .cites {
   opacity: 0;
 }
 
@@ -69,9 +64,4 @@
   font-style: italic;
   /* TODO Improve color contrast for a11y  */
   color: var(--gray-blue);
-}
-
-.resume {
-  text-align: left;
-  margin-top: 2%;
 }

@@ -65,6 +65,14 @@
   align-content: center;
 }
 
+.link {
+  color: inherit;
+  text-decoration: inherit;
+}
+.link:hover {
+  text-decoration: underline;
+}
+
 @media (max-width: 991.98px) {
   .header {
     flex-direction: column;
