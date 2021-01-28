@@ -81,15 +81,22 @@
     margin: 3rem auto;
   }
 
-  .headerImageTitleWrapper {
-    justify-content: center;
-  }
-
   .headerText {
     text-align: center;
+    margin-bottom: 60px;
+  }
+
+  .filterBox {
+    margin-bottom: 30px;
   }
 
   .searchBar {
     width: 100%;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .headerImageTitleWrapper {
+    display: none;
   }
 }
