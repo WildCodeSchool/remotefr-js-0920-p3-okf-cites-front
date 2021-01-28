@@ -43,12 +43,10 @@ export default function Data() {
   const color = 'cybertron';
 
   useEffect(() => {
-    fetch(`http://localhost:5000/api/species/datavis`)
+    fetch(`${process.env.REACT_APP_API_URL}/api/species/datavis`)
       .then((res) => res.json())
       .then((datavis_) => setDatavis(datavis_));
   }, [id]);
-
-  console.log(datavis);
 
   return (
     <div className={styles.global}>
@@ -58,8 +56,8 @@ export default function Data() {
         <div className={styles.pie}>
           <h2 className={styles.titre}>Répartition des espèces</h2>
           <PieChart
-            height={500}
-            width={500}
+            height="60vh"
+            width="60vh"
             data={[
               { key: 'Animal', data: datavis.kingdomDataTotal[0].count },
               {
@@ -81,8 +79,8 @@ export default function Data() {
               Informations manquantes parmi les animaux
             </h2>
             <RadialAreaChart
-              height={450}
-              width={450}
+              height="60vh"
+              width="60vh"
               data={[
                 {
                   key: 'ID Wikidata',
@@ -124,8 +122,8 @@ export default function Data() {
               Informations manquantes parmi les plantes
             </h2>
             <RadialAreaChart
-              height={450}
-              width={450}
+              height="60vh"
+              width="60vh"
               data={[
                 {
                   key: 'ID Wikidata',
@@ -166,8 +164,8 @@ export default function Data() {
           <div className={styles.pie}>
             <h2 className={styles.titre}>Classes au sein du règne animal</h2>
             <PieChart
-              height={500}
-              width={500}
+              height="60vh"
+              width="60vh"
               data={datavis.ClassDataDispatch.map((dispatchClass) => ({
                 key: `${dispatchClass.class}`,
                 data: dispatchClass.count,
@@ -182,8 +180,8 @@ export default function Data() {
           <div className={styles.pie}>
             <h2 className={styles.titre}>Ordres au sein du règne Végétal</h2>
             <PieChart
-              height={500}
-              width={500}
+              height="60vh"
+              width="60vh"
               data={datavis.ClassDataDispatchVeg.map((dispatchClass) => ({
                 key: `${dispatchClass.order}`,
                 data: dispatchClass.count,
@@ -200,8 +198,8 @@ export default function Data() {
         ) : (
           <div>
             <Heatmap
-              height={800}
-              width={500}
+              height="60vh"
+              width="43vh"
               data={[
                 {
                   key: 'Nom commun fr',
@@ -246,7 +244,7 @@ export default function Data() {
                   ),
                 },
                 {
-                  key: 'WikiArticle',
+                  key: 'Description',
                   data: datavis.ClassDataDispatchWikArticle.map(
                     (dispatchClass) => ({
                       key: `${dispatchClass.class}`,
@@ -259,7 +257,6 @@ export default function Data() {
           </div>
         )}
 
-        {/* heat map Végétal */}
         {/* heatmap animalia
          */}
         {datavis.kingdomDataCites?.[0] == null ? (
@@ -267,8 +264,8 @@ export default function Data() {
         ) : (
           <div>
             <Heatmap
-              height={800}
-              width={500}
+              height="60vh"
+              width="43vh"
               data={[
                 {
                   key: 'Nom commun fr',
@@ -317,7 +314,7 @@ export default function Data() {
                   ),
                 },
                 {
-                  key: 'WikiArticle',
+                  key: 'Description',
                   data: datavis.ClassDataDispatchVegWikArticle.map(
                     (dispatchClass) => ({
                       key: `${dispatchClass.order}`,
