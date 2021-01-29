@@ -56,6 +56,7 @@ export default function Data() {
         <div className={styles.pie}>
           <h2 className={styles.titre}>Répartition des espèces</h2>
           <PieChart
+            id="1"
             height="60vh"
             width="60vh"
             data={[
@@ -79,24 +80,37 @@ export default function Data() {
               Informations manquantes parmi les animaux
             </h2>
             <RadialAreaChart
+              id="2"
               height="60vh"
               width="60vh"
               data={[
                 {
+                  id: '16',
                   key: 'ID Wikidata',
                   data: datavis.kingdomDataWikiId[0].count,
                 },
-                { key: 'CITES', data: datavis.kingdomDataCites[0].count },
-                { key: 'Photo', data: datavis.kingdomDataImage[0].count },
                 {
+                  id: '17',
+                  key: 'CITES',
+                  data: datavis.kingdomDataCites[0].count,
+                },
+                {
+                  id: '21',
+                  key: 'Photo',
+                  data: datavis.kingdomDataImage[0].count,
+                },
+                {
+                  id: '18',
                   key: 'Nom commun fr',
                   data: datavis.kingdomDataCommonFr[0].count,
                 },
                 {
+                  id: '19',
                   key: 'Description',
                   data: datavis.kingdomDataArticle[0].count,
                 },
                 {
+                  id: '20',
                   key: 'Nom commun En',
                   data: datavis.kingdomDataCommonEn[0].count,
                 },
@@ -105,6 +119,7 @@ export default function Data() {
               axis={<RadialAxis type="category" />}
               series={
                 <RadialAreaSeries
+                  id="3"
                   colorScheme={color}
                   animated={animated}
                   interpolation={interpolation}
@@ -122,24 +137,37 @@ export default function Data() {
               Informations manquantes parmi les plantes
             </h2>
             <RadialAreaChart
+              id="4"
               height="60vh"
               width="60vh"
               data={[
                 {
+                  id: '11',
                   key: 'ID Wikidata',
                   data: datavis.kingdomDataWikiId[1].count,
                 },
-                { key: 'CITES', data: datavis.kingdomDataCites[1].count },
-                { key: 'Photo', data: datavis.kingdomDataImage[1].count },
                 {
+                  id: '12',
+                  key: 'CITES',
+                  data: datavis.kingdomDataCites[1].count,
+                },
+                {
+                  id: '22',
+                  key: 'Photo',
+                  data: datavis.kingdomDataImage[1].count,
+                },
+                {
+                  id: '13',
                   key: 'Nom commun fr',
                   data: datavis.kingdomDataCommonFr[1].count,
                 },
                 {
+                  id: '14',
                   key: 'Description',
                   data: datavis.kingdomDataArticle[1].count,
                 },
                 {
+                  id: '15',
                   key: 'Nom commun En',
                   data: datavis.kingdomDataCommonEn[1].count,
                 },
@@ -148,6 +176,7 @@ export default function Data() {
               axis={<RadialAxis type="category" />}
               series={
                 <RadialAreaSeries
+                  id="5"
                   colorScheme={color}
                   animated={animated}
                   interpolation={interpolation}
@@ -164,6 +193,7 @@ export default function Data() {
           <div className={styles.pie}>
             <h2 className={styles.titre}>Classes au sein du règne animal</h2>
             <PieChart
+              id="6"
               height="60vh"
               width="60vh"
               data={datavis.ClassDataDispatch.map((dispatchClass) => ({
@@ -180,6 +210,7 @@ export default function Data() {
           <div className={styles.pie}>
             <h2 className={styles.titre}>Ordres au sein du règne Végétal</h2>
             <PieChart
+              id="7"
               height="60vh"
               width="60vh"
               data={datavis.ClassDataDispatchVeg.map((dispatchClass) => ({
@@ -198,6 +229,7 @@ export default function Data() {
         ) : (
           <div>
             <Heatmap
+              id="8"
               height="60vh"
               width="43vh"
               data={[
@@ -264,6 +296,7 @@ export default function Data() {
         ) : (
           <div>
             <Heatmap
+              id="9"
               height="60vh"
               width="43vh"
               data={[
