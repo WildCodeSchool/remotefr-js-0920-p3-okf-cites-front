@@ -27,7 +27,7 @@
 }
 
 .container {
-  padding: 30px 50px;
+  padding: 60px 50px;
   background-color: var(--light-gray);
 }
 
@@ -66,11 +66,6 @@
   align-items: center;
 
   --species-card-width: min(400px, 90vw);
-}
-
-.tableWrapper {
-  max-width: 90vw;
-  overflow-x: auto;
 }
 
 .table {
@@ -118,5 +113,20 @@
 
   .button {
     margin: 20px 0;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .table tr {
+    display: block;
+    margin: 0.5rem 0;
+  }
+
+  .table th {
+    display: block;
+  }
+  .table td {
+    display: block;
+    margin-left: 5rem;
   }
 }
