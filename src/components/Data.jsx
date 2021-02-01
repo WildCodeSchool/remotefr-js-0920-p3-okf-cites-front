@@ -12,27 +12,9 @@ import styles from './Data.module.css';
 export default function Data() {
   const { id } = useParams();
   const [datavis, setDatavis] = useState({
-    kingdomDataWikiId: null,
-    kingdomDataCites: null,
-    kingdomDataCommonFr: null,
-    kingdomDataCommonEn: null,
-    kingdomDataImage: null,
-    kingdomDataTotal: null,
-    kingdomDataArticle: null,
-    ClassDataDispatch: null,
-    ClassDataDispatchVeg: null,
-    ClassDataDispatchCites: null,
-    ClassDataDispatchVegCites: null,
-    ClassDataDispatchImage: null,
-    ClassDataDispatchCommonFr: null,
-    ClassDataDispatchCommonEn: null,
-    ClassDataDispatchWikiID: null,
-    ClassDataDispatchWikArticle: null,
-    ClassDataDispatchVegImage: null,
-    ClassDataDispatchVegCommonFr: null,
-    ClassDataDispatchVegCommonEn: null,
-    ClassDataDispatchVegWikiID: null,
-    ClassDataDispatchVegWikArticle: null,
+    kingdom: null,
+    animalia: null,
+    plantae: null,
   });
 
   const innerRadius = 0.1;
@@ -43,14 +25,15 @@ export default function Data() {
   const color = 'cybertron';
 
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_API_URL}/api/species/datavis`)
+    fetch(`${process.env.REACT_APP_API_URL}/api/species/stats`)
       .then((res) => res.json())
       .then((datavis_) => setDatavis(datavis_));
   }, [id]);
 
+  console.log(datavis);
   return (
     <div className={styles.global}>
-      {datavis.kingdomDataWikiId?.[0] == null ? (
+      {datavis.kingdom == null ? (
         ''
       ) : (
         <div className={styles.pie}>
@@ -60,10 +43,10 @@ export default function Data() {
             height="60vh"
             width="60vh"
             data={[
-              { key: 'Animal', data: datavis.kingdomDataTotal[0].count },
+              { key: 'Animal', data: datavis.kingdom.animalia.total },
               {
                 key: 'Végétal',
-                data: datavis.kingdomDataTotal[1].count,
+                data: datavis.kingdom.plantae.total,
                 color: 'c',
               },
             ]}
@@ -72,7 +55,7 @@ export default function Data() {
       )}
 
       <div className={styles.data}>
-        {datavis.kingdomDataWikiId?.[0] == null ? (
+        {datavis.kingdom == null ? (
           ''
         ) : (
           <div>
@@ -87,32 +70,32 @@ export default function Data() {
                 {
                   id: '16',
                   key: 'ID Wikidata',
-                  data: datavis.kingdomDataWikiId[0].count,
+                  data: datavis.kingdom.animalia.wikidata_id,
                 },
                 {
                   id: '17',
                   key: 'CITES',
-                  data: datavis.kingdomDataCites[0].count,
+                  data: datavis.kingdom.animalia.cites,
                 },
                 {
                   id: '21',
                   key: 'Photo',
-                  data: datavis.kingdomDataImage[0].count,
+                  data: datavis.kingdom.animalia.image_url,
                 },
                 {
                   id: '18',
                   key: 'Nom commun fr',
-                  data: datavis.kingdomDataCommonFr[0].count,
+                  data: datavis.kingdom.animalia.common_name_fr,
                 },
                 {
                   id: '19',
                   key: 'Description',
-                  data: datavis.kingdomDataArticle[0].count,
+                  data: datavis.kingdom.animalia.wikipedia_url,
                 },
                 {
                   id: '20',
                   key: 'Nom commun En',
-                  data: datavis.kingdomDataCommonEn[0].count,
+                  data: datavis.kingdom.animalia.common_name_fr,
                 },
               ]}
               innerRadius={innerRadius}
@@ -129,7 +112,7 @@ export default function Data() {
           </div>
         )}
 
-        {datavis.kingdomDataWikiId?.[0] == null ? (
+        {datavis.kingdom == null ? (
           ''
         ) : (
           <div>
@@ -144,32 +127,32 @@ export default function Data() {
                 {
                   id: '11',
                   key: 'ID Wikidata',
-                  data: datavis.kingdomDataWikiId[1].count,
+                  data: datavis.kingdom.plantae.wikidata_id,
                 },
                 {
                   id: '12',
                   key: 'CITES',
-                  data: datavis.kingdomDataCites[1].count,
+                  data: datavis.kingdom.plantae.cites,
                 },
                 {
                   id: '22',
                   key: 'Photo',
-                  data: datavis.kingdomDataImage[1].count,
+                  data: datavis.kingdom.plantae.image_url,
                 },
                 {
                   id: '13',
                   key: 'Nom commun fr',
-                  data: datavis.kingdomDataCommonFr[1].count,
+                  data: datavis.kingdom.plantae.common_name_fr,
                 },
                 {
                   id: '14',
                   key: 'Description',
-                  data: datavis.kingdomDataArticle[1].count,
+                  data: datavis.kingdom.plantae.wikipedia_url,
                 },
                 {
                   id: '15',
                   key: 'Nom commun En',
-                  data: datavis.kingdomDataCommonEn[1].count,
+                  data: datavis.kingdom.plantae.common_name_en,
                 },
               ]}
               innerRadius={innerRadius}
@@ -186,8 +169,9 @@ export default function Data() {
           </div>
         )}
       </div>
+      {/* repartition class animal  */}
       <div className={styles.pieClass}>
-        {datavis.kingdomDataWikiId?.[0] == null ? (
+        {datavis.animalia == null ? (
           ''
         ) : (
           <div className={styles.pie}>
@@ -196,15 +180,17 @@ export default function Data() {
               id="6"
               height="60vh"
               width="60vh"
-              data={datavis.ClassDataDispatch.map((dispatchClass) => ({
-                key: `${dispatchClass.class}`,
-                data: dispatchClass.count,
-              }))}
+              data={Object.entries(datavis.animalia).map(
+                ([key, classTotal_]) => ({
+                  key: `${key}`,
+                  data: classTotal_.total,
+                }),
+              )}
             />
           </div>
         )}
 
-        {datavis.kingdomDataWikiId?.[0] == null ? (
+        {datavis.plantae == null ? (
           ''
         ) : (
           <div className={styles.pie}>
@@ -213,10 +199,12 @@ export default function Data() {
               id="7"
               height="60vh"
               width="60vh"
-              data={datavis.ClassDataDispatchVeg.map((dispatchClass) => ({
-                key: `${dispatchClass.order}`,
-                data: dispatchClass.count,
-              }))}
+              data={Object.entries(datavis.plantae).map(
+                ([key, orderTotal_]) => ({
+                  key: `${key}`,
+                  data: orderTotal_.total,
+                }),
+              )}
             />
           </div>
         )}
@@ -224,7 +212,7 @@ export default function Data() {
       <div className={styles.heat}>
         {/* heatmap animalia
          */}
-        {datavis.kingdomDataCites?.[0] == null ? (
+        {datavis.animalia == null ? (
           ''
         ) : (
           <div>
@@ -235,52 +223,56 @@ export default function Data() {
               data={[
                 {
                   key: 'Nom commun fr',
-                  data: datavis.ClassDataDispatchCommonFr.map(
-                    (dispatchClass) => ({
-                      key: `${dispatchClass.class}`,
-                      data: dispatchClass.count,
+                  data: Object.entries(datavis.animalia).map(
+                    ([key, nomFr]) => ({
+                      key: `${key}`,
+                      data: nomFr.common_name_fr,
                     }),
                   ),
                 },
                 {
                   key: 'Nom commun En',
-                  data: datavis.ClassDataDispatchCommonEn.map(
-                    (dispatchClass) => ({
-                      key: `${dispatchClass.class}`,
-                      data: dispatchClass.count,
+                  data: Object.entries(datavis.animalia).map(
+                    ([key, nomEr]) => ({
+                      key: `${key}`,
+                      data: nomEr.common_name_en,
                     }),
                   ),
                 },
                 {
                   key: 'Cites',
-                  data: datavis.ClassDataDispatchCites.map((dispatchClass) => ({
-                    key: `${dispatchClass.class}`,
-                    data: dispatchClass.count,
-                  })),
+                  data: Object.entries(datavis.animalia).map(
+                    ([key, nomFr]) => ({
+                      key: `${key}`,
+                      data: nomFr.common_name_fr,
+                    }),
+                  ),
                 },
                 {
                   key: 'Images',
-                  data: datavis.ClassDataDispatchImage.map((dispatchClass) => ({
-                    key: `${dispatchClass.class}`,
-                    data: dispatchClass.count,
-                  })),
+                  data: Object.entries(datavis.animalia).map(
+                    ([key, image]) => ({
+                      key: `${key}`,
+                      data: image.image_url,
+                    }),
+                  ),
                 },
 
                 {
                   key: 'Wiki ID',
-                  data: datavis.ClassDataDispatchWikiID.map(
-                    (dispatchClass) => ({
-                      key: `${dispatchClass.class}`,
-                      data: dispatchClass.count,
+                  data: Object.entries(datavis.animalia).map(
+                    ([key, wikiId]) => ({
+                      key: `${key}`,
+                      data: wikiId.wikidata_id,
                     }),
                   ),
                 },
                 {
                   key: 'Description',
-                  data: datavis.ClassDataDispatchWikArticle.map(
-                    (dispatchClass) => ({
-                      key: `${dispatchClass.class}`,
-                      data: dispatchClass.count,
+                  data: Object.entries(datavis.animalia).map(
+                    ([key, wikiArticle]) => ({
+                      key: `${key}`,
+                      data: wikiArticle.wikipedia_url,
                     }),
                   ),
                 },
@@ -291,7 +283,7 @@ export default function Data() {
 
         {/* heatmap animalia
          */}
-        {datavis.kingdomDataCites?.[0] == null ? (
+        {datavis.plantae == null ? (
           ''
         ) : (
           <div>
@@ -302,56 +294,48 @@ export default function Data() {
               data={[
                 {
                   key: 'Nom commun fr',
-                  data: datavis.ClassDataDispatchVegCommonFr.map(
-                    (dispatchClass) => ({
-                      key: `${dispatchClass.order}`,
-                      data: dispatchClass.count,
-                    }),
-                  ),
+                  data: Object.entries(datavis.plantae).map(([key, nomFr]) => ({
+                    key: `${key}`,
+                    data: nomFr.common_name_fr,
+                  })),
                 },
                 {
                   key: 'Nom commun En',
-                  data: datavis.ClassDataDispatchVegCommonEn.map(
-                    (dispatchClass) => ({
-                      key: `${dispatchClass.order}`,
-                      data: dispatchClass.count,
-                    }),
-                  ),
+                  data: Object.entries(datavis.plantae).map(([key, nomEr]) => ({
+                    key: `${key}`,
+                    data: nomEr.common_name_en,
+                  })),
                 },
                 {
                   key: 'Cites',
-                  data: datavis.ClassDataDispatchVegCites.map(
-                    (dispatchClass) => ({
-                      key: `${dispatchClass.order}`,
-                      data: dispatchClass.count,
-                    }),
-                  ),
+                  data: Object.entries(datavis.plantae).map(([key, nomFr]) => ({
+                    key: `${key}`,
+                    data: nomFr.common_name_fr,
+                  })),
                 },
                 {
                   key: 'Images',
-                  data: datavis.ClassDataDispatchVegImage.map(
-                    (dispatchClass) => ({
-                      key: `${dispatchClass.order}`,
-                      data: dispatchClass.count,
-                    }),
-                  ),
+                  data: Object.entries(datavis.plantae).map(([key, image]) => ({
+                    key: `${key}`,
+                    data: image.image_url,
+                  })),
                 },
 
                 {
                   key: 'Wiki ID',
-                  data: datavis.ClassDataDispatchVegWikiID.map(
-                    (dispatchClass) => ({
-                      key: `${dispatchClass.order}`,
-                      data: dispatchClass.count,
+                  data: Object.entries(datavis.plantae).map(
+                    ([key, wikiId]) => ({
+                      key: `${key}`,
+                      data: wikiId.wikidata_id,
                     }),
                   ),
                 },
                 {
                   key: 'Description',
-                  data: datavis.ClassDataDispatchVegWikArticle.map(
-                    (dispatchClass) => ({
-                      key: `${dispatchClass.order}`,
-                      data: dispatchClass.count,
+                  data: Object.entries(datavis.plantae).map(
+                    ([key, wikiArticle]) => ({
+                      key: `${key}`,
+                      data: wikiArticle.wikipedia_url,
                     }),
                   ),
                 },
