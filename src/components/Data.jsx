@@ -30,7 +30,6 @@ export default function Data() {
       .then((datavis_) => setDatavis(datavis_));
   }, [id]);
 
-  console.log(datavis);
   return (
     <div className={styles.global}>
       {datavis.kingdom == null ? (
