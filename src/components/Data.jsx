@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useCallback, useEffect, useState, useMemo } from 'react';
 import {
   RadialAreaChart,
   RadialAxis,
@@ -8,14 +7,15 @@ import {
   Heatmap,
 } from 'reaviz';
 import styles from './Data.module.css';
+import { useMediaQuery } from '../utils';
 
 export default function Data() {
-  const { id } = useParams();
   const [datavis, setDatavis] = useState({
     kingdom: null,
     animalia: null,
     plantae: null,
   });
+  const isMobile = useMediaQuery('(max-width: 991.98px)');
 
   const innerRadius = 0.1;
 
@@ -28,20 +28,96 @@ export default function Data() {
     fetch(`${process.env.REACT_APP_API_URL}/api/species/stats`)
       .then((res) => res.json())
       .then((datavis_) => setDatavis(datavis_));
-  }, [id]);
+  }, []);
 
-  console.log(datavis);
+  const getHeatmapData = useCallback((obj) => {
+    if (obj == null) return [];
+
+    const dataCommonNameFr = {
+      key: 'Nom commun fr',
+      data: [],
+    };
+    const dataCommonNameEN = {
+      key: 'Nom commun en',
+      data: [],
+    };
+    const dataCites = {
+      key: 'CITES',
+      data: [],
+    };
+    const dataImage = {
+      key: 'Images',
+      data: [],
+    };
+    const dataWikidataId = {
+      key: 'Wiki ID',
+      data: [],
+    };
+    const dataWikipediaUrl = {
+      key: 'Description',
+      data: [],
+    };
+
+    Object.entries(obj).forEach(([key, stats]) => {
+      dataCommonNameFr.data.push({
+        key,
+        data: stats.common_name_fr,
+      });
+      dataCommonNameEN.data.push({
+        key,
+        data: stats.common_name_en,
+      });
+      dataCites.data.push({
+        key,
+        data: stats.cites,
+      });
+      dataImage.data.push({
+        key,
+        data: stats.image_url,
+      });
+      dataWikidataId.data.push({
+        key,
+        data: stats.wikidata_id,
+      });
+      dataWikipediaUrl.data.push({
+        key,
+        data: stats.wikipedia_url,
+      });
+    });
+
+    return [
+      dataCommonNameFr,
+      dataCommonNameEN,
+      dataCites,
+      dataImage,
+      dataWikidataId,
+      dataWikipediaUrl,
+    ];
+  }, []);
+
+  const animaliaHeatmapData = useMemo(() => getHeatmapData(datavis.animalia), [
+    datavis,
+    getHeatmapData,
+  ]);
+  const plantaeHeatmapData = useMemo(() => getHeatmapData(datavis.plantae), [
+    datavis,
+    getHeatmapData,
+  ]);
+
   return (
     <div className={styles.global}>
+      <h1 className={styles.title}>
+        S'informer sur la répartition des espèces
+      </h1>
       {datavis.kingdom == null ? (
         ''
       ) : (
         <div className={styles.pie}>
-          <h2 className={styles.titre}>Répartition des espèces</h2>
+          <h2 className={styles.graphTitle}>Répartition des espèces</h2>
           <PieChart
             id="1"
             height="60vh"
-            width="60vh"
+            width="100vw"
             data={[
               { key: 'Animal', data: datavis.kingdom.animalia.total },
               {
@@ -59,13 +135,13 @@ export default function Data() {
           ''
         ) : (
           <div>
-            <h2 className={styles.titre}>
+            <h2 className={styles.graphTitle}>
               Informations manquantes parmi les animaux
             </h2>
             <RadialAreaChart
               id="2"
               height="60vh"
-              width="60vh"
+              width={isMobile ? '100vw' : '50vw'}
               data={[
                 {
                   id: '16',
@@ -116,13 +192,13 @@ export default function Data() {
           ''
         ) : (
           <div>
-            <h2 className={styles.titre}>
+            <h2 className={styles.graphTitle}>
               Informations manquantes parmi les plantes
             </h2>
             <RadialAreaChart
               id="4"
               height="60vh"
-              width="60vh"
+              width={isMobile ? '100vw' : '50vw'}
               data={[
                 {
                   id: '11',
@@ -175,11 +251,13 @@ export default function Data() {
           ''
         ) : (
           <div className={styles.pie}>
-            <h2 className={styles.titre}>Classes au sein du règne animal</h2>
+            <h2 className={styles.graphTitle}>
+              Classes au sein du règne animal
+            </h2>
             <PieChart
               id="6"
               height="60vh"
-              width="60vh"
+              width={isMobile ? '100vw' : '50vw'}
               data={Object.entries(datavis.animalia).map(
                 ([key, classTotal_]) => ({
                   key: `${key}`,
@@ -194,11 +272,13 @@ export default function Data() {
           ''
         ) : (
           <div className={styles.pie}>
-            <h2 className={styles.titre}>Ordres au sein du règne Végétal</h2>
+            <h2 className={styles.graphTitle}>
+              Ordres au sein du règne Végétal
+            </h2>
             <PieChart
               id="7"
               height="60vh"
-              width="60vh"
+              width={isMobile ? '100vw' : '50vw'}
               data={Object.entries(datavis.plantae).map(
                 ([key, orderTotal_]) => ({
                   key: `${key}`,
@@ -210,136 +290,26 @@ export default function Data() {
         )}
       </div>
       <div className={styles.heat}>
-        {/* heatmap animalia
-         */}
-        {datavis.animalia == null ? (
-          ''
-        ) : (
-          <div>
+        {/* heatmap animalia */}
+        {datavis.animalia != null && (
+          <div className={styles.heatmap}>
             <Heatmap
               id="8"
               height="60vh"
-              width="43vh"
-              data={[
-                {
-                  key: 'Nom commun fr',
-                  data: Object.entries(datavis.animalia).map(
-                    ([key, nomFr]) => ({
-                      key: `${key}`,
-                      data: nomFr.common_name_fr,
-                    }),
-                  ),
-                },
-                {
-                  key: 'Nom commun En',
-                  data: Object.entries(datavis.animalia).map(
-                    ([key, nomEr]) => ({
-                      key: `${key}`,
-                      data: nomEr.common_name_en,
-                    }),
-                  ),
-                },
-                {
-                  key: 'Cites',
-                  data: Object.entries(datavis.animalia).map(
-                    ([key, nomFr]) => ({
-                      key: `${key}`,
-                      data: nomFr.common_name_fr,
-                    }),
-                  ),
-                },
-                {
-                  key: 'Images',
-                  data: Object.entries(datavis.animalia).map(
-                    ([key, image]) => ({
-                      key: `${key}`,
-                      data: image.image_url,
-                    }),
-                  ),
-                },
-
-                {
-                  key: 'Wiki ID',
-                  data: Object.entries(datavis.animalia).map(
-                    ([key, wikiId]) => ({
-                      key: `${key}`,
-                      data: wikiId.wikidata_id,
-                    }),
-                  ),
-                },
-                {
-                  key: 'Description',
-                  data: Object.entries(datavis.animalia).map(
-                    ([key, wikiArticle]) => ({
-                      key: `${key}`,
-                      data: wikiArticle.wikipedia_url,
-                    }),
-                  ),
-                },
-              ]}
+              width={isMobile ? '80vw' : '20vw'}
+              data={animaliaHeatmapData}
             />
           </div>
         )}
 
-        {/* heatmap animalia
-         */}
-        {datavis.plantae == null ? (
-          ''
-        ) : (
-          <div>
+        {/* heatmap plantae */}
+        {datavis.plantae != null && (
+          <div className={styles.heatmap}>
             <Heatmap
               id="9"
               height="60vh"
-              width="43vh"
-              data={[
-                {
-                  key: 'Nom commun fr',
-                  data: Object.entries(datavis.plantae).map(([key, nomFr]) => ({
-                    key: `${key}`,
-                    data: nomFr.common_name_fr,
-                  })),
-                },
-                {
-                  key: 'Nom commun En',
-                  data: Object.entries(datavis.plantae).map(([key, nomEr]) => ({
-                    key: `${key}`,
-                    data: nomEr.common_name_en,
-                  })),
-                },
-                {
-                  key: 'Cites',
-                  data: Object.entries(datavis.plantae).map(([key, nomFr]) => ({
-                    key: `${key}`,
-                    data: nomFr.common_name_fr,
-                  })),
-                },
-                {
-                  key: 'Images',
-                  data: Object.entries(datavis.plantae).map(([key, image]) => ({
-                    key: `${key}`,
-                    data: image.image_url,
-                  })),
-                },
-
-                {
-                  key: 'Wiki ID',
-                  data: Object.entries(datavis.plantae).map(
-                    ([key, wikiId]) => ({
-                      key: `${key}`,
-                      data: wikiId.wikidata_id,
-                    }),
-                  ),
-                },
-                {
-                  key: 'Description',
-                  data: Object.entries(datavis.plantae).map(
-                    ([key, wikiArticle]) => ({
-                      key: `${key}`,
-                      data: wikiArticle.wikipedia_url,
-                    }),
-                  ),
-                },
-              ]}
+              width={isMobile ? '80vw' : '20vw'}
+              data={plantaeHeatmapData}
             />
           </div>
         )}
