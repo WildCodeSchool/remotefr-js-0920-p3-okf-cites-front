@@ -45,7 +45,7 @@
 }
 
 .navList {
-  --navbar-link-width: 15rem;
+  --navbar-link-width: 15.1rem; /* .1 for firefox to prevent extra text line */
 
   width: 100%;
 
